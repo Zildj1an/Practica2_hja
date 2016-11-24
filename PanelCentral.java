@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.lang.StringBuilder;
 
 public class PanelCentral extends JPanel implements Observador {
@@ -14,13 +15,20 @@ public class PanelCentral extends JPanel implements Observador {
 	private JPanel pnlDatos;
 	private Controlador control;
 	private int num_cards_selected;
+	private int max_cards_selected;
+	private String[] cards_onBoard;
+	private ArrayList<JToggleButton> btns;
 
 	public PanelCentral(Controlador control) {
 		this.control = control;
 		this.num_cards_selected = 0;
+		this.max_cards_selected = 5;
+		this.btns = new ArrayList<JToggleButton>();
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(300, 480));	
 		setBorder(BorderFactory.createEmptyBorder(2, 15, 0, 0));
+
+		cards_onBoard = new String[5];
 
 		generarPanelCartas();
 		generarPanelDatos();
@@ -55,26 +63,44 @@ public class PanelCentral extends JPanel implements Observador {
 					@Override
 					protected Color getSelectColor() {
 						Color c = null;
-						if (num_cards_selected < 5)
+						if (num_cards_selected <= max_cards_selected) {
 							c = cambiarColorBoton(jtb, true, jtb.getText().charAt(1));
+						}
 						return c;
 					}
 				});
 
-				jtb.addItemListener(new ItemListener() {
-					public void itemStateChanged(ItemEvent ev) {
-						if (ev.getStateChange() == ItemEvent.SELECTED) {
-							if (num_cards_selected < 5) 
-								num_cards_selected += 1;
-						} else if (ev.getStateChange() == ItemEvent.DESELECTED) {
-							if (num_cards_selected > 0) 
-								num_cards_selected -= 1;
-						}
-				}});
+				btns.add(jtb);
+
 				ActionListener actionListener = new ActionListener() {
 					public void actionPerformed(ActionEvent actionEvent) {
 						JToggleButton jtb1 = (JToggleButton)actionEvent.getSource();
-						control.poner(jtb1.getText(), "board");	
+						if ((num_cards_selected < max_cards_selected) && jtb1.isSelected()) {
+							num_cards_selected += 1;	
+							control.poner(jtb1.getText(), "board");	
+
+							if (num_cards_selected == 5) {
+								for (JToggleButton j : btns) {
+									if (j.isSelected() == false) 
+										j.setEnabled(false);
+								}		
+							}
+						}
+						else if (num_cards_selected == 5 && !jtb1.isSelected()) { 
+							if (num_cards_selected == 5) {
+								int cont = 0;
+								for (JToggleButton j : btns) {
+									if (!j.isSelected()) {
+										j.setEnabled(true);
+									}
+								}		
+							}
+							
+							num_cards_selected -= 1;
+						} else if (num_cards_selected > 0 && !jtb1.isSelected()) {
+							num_cards_selected -= 1;
+						}
+
 				}};
 
 				jtb.addActionListener(actionListener);
