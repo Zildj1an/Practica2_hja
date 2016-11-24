@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelDerecho extends JPanel {
+public class PanelDerecho extends JPanel implements Observador {
 
 	JPanel pnlDatos;
 	private JLabel lblTexto1;
@@ -11,8 +11,10 @@ public class PanelDerecho extends JPanel {
 	private JLabel lblTexto5;
 	private JLabel lblTexto6;
 	private JLabel lblTexto7;
+	private Controlador control;
 
-	public PanelDerecho() {
+	public PanelDerecho(Controlador control) {
+		this.control = control;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setPreferredSize(new Dimension(300, 480));	
 		setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -42,6 +44,12 @@ public class PanelDerecho extends JPanel {
 		add(lblTexto4);
 		add(lblTexto5);
 		add(lblTexto6);
+
+		this.control.addObservador(this);
 	}
+
+	@Override public void onSelectCard(String combo) {}
+	@Override public void onSliderChange(int value) {}
+	@Override public void onSelectCardBoard(final String card) {} 
 }
 

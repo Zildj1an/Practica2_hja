@@ -1,17 +1,23 @@
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.StringBuilder;
 
-public class PanelCentral extends JPanel {
+public class PanelCentral extends JPanel implements Observador {
 
 	private JPanel pnlCartas;
 	private JPanel pnlDatos;
+	private Controlador control;
+	private int num_cards_selected;
 
-	public PanelCentral(JFrame frame) {
+	public PanelCentral(Controlador control) {
+		this.control = control;
+		this.num_cards_selected = 0;
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(300, 480));	
 		setBorder(BorderFactory.createEmptyBorder(2, 15, 0, 0));
@@ -22,6 +28,7 @@ public class PanelCentral extends JPanel {
 		add(pnlCartas, BorderLayout.WEST);
 		add(pnlDatos, BorderLayout.CENTER);
 
+		this.control.addObservador(this);
 	}
 
 	private void generarPanelCartas() {
@@ -47,20 +54,30 @@ public class PanelCentral extends JPanel {
 				jtb.setUI(new MetalToggleButtonUI() {
 					@Override
 					protected Color getSelectColor() {
-						return cambiarColorBoton(jtb, true, jtb.getText().charAt(1));
+						Color c = null;
+						if (num_cards_selected < 5)
+							c = cambiarColorBoton(jtb, true, jtb.getText().charAt(1));
+						return c;
 					}
 				});
 
-				//ItemListener itemListener = new ItemListener() {
-					//public void itemStateChanged(ItemEvent ev) {
-						//JToggleButton jtb1 = (JToggleButton)ev.getSource();
-						//if(ev.getStateChange() == ItemEvent.SELECTED)
-							//cambiarColorBoton(jtb1, true, jtb1.getText());
-						//else if(ev.getStateChange() == ItemEvent.DESELECTED)
-							//cambiarColorBoton(jtb1, false, jtb1.getText());
-				//}};	
+				jtb.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent ev) {
+						if (ev.getStateChange() == ItemEvent.SELECTED) {
+							if (num_cards_selected < 5) 
+								num_cards_selected += 1;
+						} else if (ev.getStateChange() == ItemEvent.DESELECTED) {
+							if (num_cards_selected > 0) 
+								num_cards_selected -= 1;
+						}
+				}});
+				ActionListener actionListener = new ActionListener() {
+					public void actionPerformed(ActionEvent actionEvent) {
+						JToggleButton jtb1 = (JToggleButton)actionEvent.getSource();
+						control.poner(jtb1.getText(), "board");	
+				}};
 
-				//jtb.addItemListener(itemListener);
+				jtb.addActionListener(actionListener);
 				pnlCartas.add(jtb);
 			}
 		}		
@@ -99,31 +116,35 @@ public class PanelCentral extends JPanel {
 		pnlDatos.setLayout(new BoxLayout(pnlDatos, BoxLayout.Y_AXIS));
 
 		int marginLeft = 20;
-		JLabel lbl   = new JLabel(">=str. flush");
-		lbl.setBorder(BorderFactory.createEmptyBorder(5, marginLeft, 0, 0));
-		JLabel lbl1  = new JLabel("flush");
+		JLabel lbl1  = new JLabel("Straight flush");
 		lbl1.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl2  = new JLabel("straight");
+		JLabel lbl2 = new JLabel("Four of a Kind");
 		lbl2.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl3  = new JLabel("set");
+		JLabel lbl3 = new JLabel("Full house");
 		lbl3.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl4  = new JLabel("two pair");
+		JLabel lbl4  = new JLabel("flush");
 		lbl4.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl5  = new JLabel("overpair");
+		JLabel lbl5  = new JLabel("straight");
 		lbl5.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl6  = new JLabel("top pair");
+		JLabel lbl6  = new JLabel("set");
 		lbl6.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl7  = new JLabel("pp below tp");
+		JLabel lbl7  = new JLabel("two pair");
 		lbl7.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl8  = new JLabel("middle pair");
+		JLabel lbl8  = new JLabel("overpair");
 		lbl8.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl9  = new JLabel("weak pair");
+		JLabel lbl9  = new JLabel("top pair");
 		lbl9.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl10 = new JLabel("ace high");
+		JLabel lbl10  = new JLabel("pp below tp");
 		lbl10.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl11 = new JLabel("no made hand");
+		JLabel lbl11  = new JLabel("middle pair");
 		lbl11.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		pnlDatos.add(lbl);
+		JLabel lbl12  = new JLabel("weak pair");
+		lbl12.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		JLabel lbl13 = new JLabel("ace high");
+		lbl13.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		JLabel lbl14 = new JLabel("no made hand");
+		lbl14.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+
 		pnlDatos.add(lbl1);
 		pnlDatos.add(lbl2);
 		pnlDatos.add(lbl3);
@@ -135,6 +156,10 @@ public class PanelCentral extends JPanel {
 		pnlDatos.add(lbl9);
 		pnlDatos.add(lbl10);
 		pnlDatos.add(lbl11);
+		pnlDatos.add(lbl12);
+		pnlDatos.add(lbl13);
+		pnlDatos.add(lbl14);
+
 	}
 
     private char valorCarta(int num) {
@@ -163,6 +188,8 @@ public class PanelCentral extends JPanel {
         return letra;
     }
 
-
+	@Override public void onSelectCard(final String combo) {}
+	@Override public void onSliderChange(final int value) {}
+	@Override public void onSelectCardBoard(final String card) {} 
 }
 

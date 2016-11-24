@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 public class VistaPoker extends JFrame {
 	
-	public VistaPoker() {
+	public VistaPoker(Controlador control) {
 		super("Practica 2");
 		setWindowProperties();
 
@@ -13,19 +13,19 @@ public class VistaPoker extends JFrame {
 		content.setLayout(new BorderLayout());
 
 		// Panel Izquierdo
-		PanelIzquierdo pnlIzdo = new PanelIzquierdo();
+		PanelIzquierdo pnlIzdo = new PanelIzquierdo(control);
 		content.add(pnlIzdo, BorderLayout.WEST);
 
 		// Panel Central 
-		PanelCentral pnlCentral = new PanelCentral(this);
+		PanelCentral pnlCentral = new PanelCentral(control);
 		content.add(pnlCentral, BorderLayout.CENTER);
 
 		// Panel Derecho 
-		PanelDerecho pnlDer = new PanelDerecho();
+		PanelDerecho pnlDer = new PanelDerecho(control);
 		content.add(pnlDer, BorderLayout.EAST);
 
 		// Panel Inferior 
-		PanelInferior pnlInf = new PanelInferior();
+		PanelInferior pnlInf = new PanelInferior(control);
 		content.add(pnlInf, BorderLayout.SOUTH);
 
 		pack();

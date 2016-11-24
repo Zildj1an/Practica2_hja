@@ -1,11 +1,13 @@
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelIzquierdo extends JPanel {
+public class PanelIzquierdo extends JPanel implements Observador {
 
 	private JPanel pnlBotones;
 	private JPanel pnlSliderDer;
@@ -15,8 +17,12 @@ public class PanelIzquierdo extends JPanel {
 	private JSlider sliderHor;
 	private JLabel lblPorcentajeVer;
 	private JLabel lblPorcentajeHor;
+	
+	private Controlador control;
 
-	public PanelIzquierdo() {
+
+	public PanelIzquierdo(Controlador control) {
+		this.control = control;
 		setLayout(new BorderLayout()); 
 		setBorder(BorderFactory.createEmptyBorder(2, 2, 0, 0));
 
@@ -27,6 +33,7 @@ public class PanelIzquierdo extends JPanel {
 		add(pnlSliderDer, BorderLayout.EAST);
 		add(pnlSliderInferior, BorderLayout.SOUTH);
 
+		this.control.addObservador(this);
 	}
 
 	private void generarPanelBotones() {
@@ -47,16 +54,13 @@ public class PanelIzquierdo extends JPanel {
 				}
 			});
 
-			ItemListener itemListener = new ItemListener() {
-				public void itemStateChanged(ItemEvent ev) {
-					JToggleButton jtb1 = (JToggleButton)ev.getSource();
-					if(ev.getStateChange() == ItemEvent.SELECTED)
-						cambiarColorBoton(jtb1, true, jtb1.getText());
-					else if(ev.getStateChange() == ItemEvent.DESELECTED)
-						cambiarColorBoton(jtb1, false, jtb1.getText());
-			}};	
+			ActionListener actionListener = new ActionListener() {
+				public void actionPerformed(ActionEvent actionEvent) {
+					JToggleButton jtb1 = (JToggleButton)actionEvent.getSource();
+					control.poner(jtb1.getText(), "hand");	
+			}};
 
-			jtb.addItemListener(itemListener);
+			jtb.addActionListener(actionListener);
 			pnlBotones.add(jtb);
 		}
 	}
@@ -74,7 +78,7 @@ public class PanelIzquierdo extends JPanel {
 				c = new Color(239, 56, 11);
 		} else {
 			jtb.setForeground(Color.BLACK);
-			System.out.println("entra2");
+
 			if (rango.charAt(0) == rango.charAt(1))
 				jtb.setBackground(new Color(200, 224, 255));
 			else if (rango.charAt(2) == 's')
@@ -128,5 +132,9 @@ public class PanelIzquierdo extends JPanel {
 		pnlSliderInferior.add(sliderHor);
 		pnlSliderInferior.add(lblPorcentajeHor);
 	}
+
+	@Override public void onSelectCard(final String combo) {}
+	@Override public void onSliderChange(final int value) {}
+	@Override public void onSelectCardBoard(final String card) {} 
 
 }
