@@ -21,4 +21,14 @@ public class Controlador {
 				ob.onSelectCard(combo);
 		}
 	}
+
+	public void desponer(String card, String tablero) {
+		if (tablero == "board") {
+			for (Observador ob : observadores)
+				ob.onDeselectCardBoard(card);
+		} else if (tablero == "hand") {
+			for (Observador ob : observadores)
+				ob.onDeselectCard(card);
+		}
+	}
 }

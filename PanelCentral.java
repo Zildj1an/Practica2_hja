@@ -100,6 +100,10 @@ public class PanelCentral extends JPanel implements Observador {
 						} else if (num_cards_selected > 0 && !jtb1.isSelected()) {
 							num_cards_selected -= 1;
 						}
+						
+						if (!jtb.isSelected()) {
+							control.desponer(jtb1.getText(), "board");	
+						}
 
 				}};
 
@@ -217,5 +221,7 @@ public class PanelCentral extends JPanel implements Observador {
 	@Override public void onSelectCard(final String combo) {}
 	@Override public void onSliderChange(final int value) {}
 	@Override public void onSelectCardBoard(final String card) {} 
+	@Override public void onDeselectCardBoard(final String card) {}
+	@Override public void onDeselectCard(final String card) {}
 }
 

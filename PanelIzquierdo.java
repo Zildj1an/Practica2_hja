@@ -133,8 +133,9 @@ public class PanelIzquierdo extends JPanel implements Observador {
 		pnlSliderInferior.add(lblPorcentajeHor);
 	}
 
+	@Override public void onDeselectCardBoard(final String card) {}
+	@Override public void onDeselectCard(final String card) {}
 	@Override public void onSelectCard(final String combo) {}
 	@Override public void onSliderChange(final int value) {}
 	@Override public void onSelectCardBoard(final String card) {} 
-
 }
