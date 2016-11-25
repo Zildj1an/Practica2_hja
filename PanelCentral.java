@@ -218,10 +218,12 @@ public class PanelCentral extends JPanel implements Observador {
         return letra;
     }
 
-	@Override public void onSelectCard(final String combo) {}
+	@Override public void onSelectCard(final String card) {}
 	@Override public void onSliderChange(final int value) {}
 	@Override public void onSelectCardBoard(final String card) {} 
 	@Override public void onDeselectCardBoard(final String card) {}
 	@Override public void onDeselectCard(final String card) {}
+	@Override public void onRangeProccess(final ArrayList<String> cards) {}
+	@Override public void onClearCards() {}
 }
 

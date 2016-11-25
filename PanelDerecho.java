@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
 
@@ -49,9 +50,11 @@ public class PanelDerecho extends JPanel implements Observador {
 	}
 
 	@Override public void onSliderChange(int value) {}
-	@Override public void onSelectCard(String combo) {}
+	@Override public void onSelectCard(final String card) {}
 	@Override public void onSelectCardBoard(final String card) {} 
 	@Override public void onDeselectCardBoard(final String card) {}
 	@Override public void onDeselectCard(final String card) {}
+	@Override public void onRangeProccess(final ArrayList<String> cards) {}
+	@Override public void onClearCards() {}
 }
 

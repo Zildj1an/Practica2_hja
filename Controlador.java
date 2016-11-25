@@ -31,4 +31,14 @@ public class Controlador {
 				ob.onDeselectCard(card);
 		}
 	}
+
+	public void procesar(ArrayList<String> cards) {
+		for (Observador ob : observadores)
+			ob.onRangeProccess(cards);
+	}
+
+	public void clear() {
+		for (Observador ob : observadores)
+			ob.onClearCards();
+	}
 }
