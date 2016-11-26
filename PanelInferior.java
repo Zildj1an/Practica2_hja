@@ -100,15 +100,18 @@ public class PanelInferior extends JPanel implements Observador {
         return letra;
     }
 
-	@Override public void onShowText(final String card) {
+	@Override  
+	public void onAddCardHand(final String card) {
 		cards_onHand.add(card);
+	}
+
+	@Override public void onShowText(final String card) {
 		mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
 	}
 
 	@Override
 	public void onSelectCard(final String text) { 
 		txtCartasEnMano_orig.setText(text);
-
 	}
 
 	@Override

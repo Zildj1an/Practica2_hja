@@ -17,8 +17,10 @@ public class Controlador {
 			for (Observador ob : observadores)
 				ob.onSelectCardBoard(card);
 		} else if (tablero == "hand") {
-			for (Observador ob : observadores)
+			for (Observador ob : observadores) {
+				ob.onAddCardHand(card);
 				ob.onShowText(card);
+			}
 		}
 	}
 
@@ -32,8 +34,10 @@ public class Controlador {
 			for (Observador ob : observadores)
 				ob.onDeselectCardBoard(card);
 		} else if (tablero == "hand") {
-			for (Observador ob : observadores)
+			for (Observador ob : observadores) {
 				ob.onShowText(card);
+				ob.onDeselectCard(card);
+			}
 		}
 	}
 

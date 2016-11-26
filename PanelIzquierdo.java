@@ -501,7 +501,6 @@ public class PanelIzquierdo extends JPanel implements Observador {
 							texto.append(sb.toString());
 
 							j = cont2 + j;
-							//System.out.println(cont2 + " - " + j);
 						} 
 					}
 				}
@@ -565,7 +564,6 @@ public class PanelIzquierdo extends JPanel implements Observador {
 					int cont2 = 0;
 					boolean enc = false;
 					if (jtbArray[i][j-1].isSelected()) {
-						//System.out.println(i + " - " + j);
 						for (int k = i+1; k < 13 && !enc; k++) {
 							if (jtbArray[k][j-1].isSelected()) { 
 								cont2 +=1;
@@ -641,6 +639,7 @@ public class PanelIzquierdo extends JPanel implements Observador {
 
 		control.mostrar(sb.toString());
 	}
+	@Override public void onAddCardHand(final String card) {}
 	@Override public void onSelectCard(final String text) {}
 	@Override public void onDeselectCardBoard(final String card) {}
 	@Override public void onDeselectCard(final String card) {}

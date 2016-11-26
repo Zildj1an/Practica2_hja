@@ -232,6 +232,7 @@ public class PanelCentral extends JPanel implements Observador {
 		num_cards_selected = 0;	
 	}
 
+	@Override public void onAddCardHand(final String card) {}
 	@Override public void onShowText(final String card) {}
 	@Override public void onSelectCard(final String text) {}
 	@Override public void onSliderChange(final int value) {}
