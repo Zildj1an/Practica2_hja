@@ -3,6 +3,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.lang.StringBuilder;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
@@ -176,34 +177,183 @@ public class PanelIzquierdo extends JPanel implements Observador {
         return numero;
     }
 
+	private void seleccionarCarta(String card) {
+		boolean salir = false;
+		for (int i = 0; i < 13 && !salir; i++) {
+		for (int j = 0; j < 13 && !salir; j++) {
+			if (jtbArray[i][j].getText().equals(card)) {
+				jtbArray[i][j].setSelected(true);
+				cambiarColorBoton(jtbArray[i][j], false, card); 
+				salir = true;
+			}
+		}}
+	}
+
 	@Override 
 	public void onRangeProccess(final ArrayList<String> cards) {
 		if (cards.size() > 0) {
+			// Busca las manos a colorear
 			for (int index = 0; index < cards.size(); index++) {
-				boolean salir = false;
-				for (int i = 0; i < 13 && !salir; i++) {
-				for (int j = 0; j < 13 && !salir; j++) {
-					if (jtbArray[i][j].getText().equals(cards.get(index))) {
-						jtbArray[i][j].setSelected(true);
-						cambiarColorBoton(jtbArray[i][j], false, jtbArray[i][j].getText());
-						salir = true;
+				String actual_card = cards.get(index);
+
+				if (actual_card.length() == 2) {
+					seleccionarCarta(actual_card);
+				} else if (actual_card.length() == 3) {
+					if (actual_card.charAt(2) == '+') {
+						if (actual_card.charAt(0) == actual_card.charAt(1))	{
+							StringBuilder sb = new StringBuilder();
+							sb.append(actual_card.charAt(0));
+							sb.append(actual_card.charAt(1));
+							String c = sb.toString();
+
+							boolean salir = false;
+							int indice = 0;
+							for (int i = 0; i < 13 && !salir; i++) {
+								if (jtbArray[i][i].getText().equals(c)) 
+									indice = i;	
+							}
+								
+							for (int i = indice; i >=0; i--) {
+								jtbArray[i][i].setSelected(true);
+								cambiarColorBoton(jtbArray[i][i], false, c); 
+							}
+						} 
+					} else { 
+						seleccionarCarta(actual_card);	
 					}
-				}}
+				} else if (actual_card.length() == 4) {
+					StringBuilder sb = new StringBuilder();
+					sb.append(actual_card.charAt(0));
+					sb.append(actual_card.charAt(1));
+					sb.append(actual_card.charAt(2));
+					String c = sb.toString();
+					boolean enc = false;
+						
+					if (actual_card.charAt(2) == 's') {
+						for (int i = 0; i < 13 && !enc; i++) {
+						for (int j = i + 1; j < 13 && !enc; j++) {
+							if (jtbArray[i][j].getText().equals(c)) {
+								enc = true;
+									
+								for (int k = j; k > i; k--) {
+									String actual = jtbArray[i][k].getText();		
+									jtbArray[i][k].setSelected(true);
+									cambiarColorBoton(jtbArray[i][k], false, actual); 
+								}	
+							}
+						}}	
+					} else {
+						for (int i = 0; i < 13 && !enc; i++) {
+						for (int j = 0; j < i  && !enc; j++) {
+							if (jtbArray[i][j].getText().equals(c)) {
+								enc = true;
+									
+								for (int k = i; k > j; k--) {
+									String actual = jtbArray[k][j].getText();		
+									jtbArray[k][j].setSelected(true);
+									cambiarColorBoton(jtbArray[k][j], false, actual); 
+								}	
+							}
+								
+						}}
+						
+					}
+				} else if (actual_card.length() == 5) {
+					if (actual_card.charAt(0) == actual_card.charAt(1) && actual_card.charAt(2) == '-')	{
+						// JJ-44
+						StringBuilder sb1 = new StringBuilder();
+						sb1.append(actual_card.charAt(0));
+						sb1.append(actual_card.charAt(1));
+						StringBuilder sb2 = new StringBuilder();
+						sb2.append(actual_card.charAt(3));
+						sb2.append(actual_card.charAt(4));
+						String c1 = sb1.toString();
+						String c2 = sb2.toString();
+
+						if (valorCarta(actual_card.charAt(0)) < valorCarta(actual_card.charAt(3))) {
+							String aux = c1;
+							c1 = c2;
+							c2 = aux;
+						}
+						boolean salir = false;
+						for (int i = 0; i < 13 && !salir; i++) {
+							if (jtbArray[i][i].getText().equals(c1)) {
+								for (int j = i; j < 13 && !salir; j++) {
+									String actual = jtbArray[j][j].getText();	
+									jtbArray[j][j].setSelected(true);
+									cambiarColorBoton(jtbArray[j][j], false, actual); 	
+									if (jtbArray[j][j].getText().equals(c2))
+										salir = true;
+								}
+							} 
+						}
+					}
+				} else if (actual_card.length() == 7) {
+					StringBuilder sb1 = new StringBuilder();
+					sb1.append(actual_card.charAt(0));
+					sb1.append(actual_card.charAt(1));
+					StringBuilder sb2 = new StringBuilder();
+					sb2.append(actual_card.charAt(4));
+					sb2.append(actual_card.charAt(5));
+
+					if (actual_card.charAt(2) == 's' && actual_card.charAt(6) == 's') {
+						sb1.append(actual_card.charAt(2));
+						String c1 = sb1.toString();
+						sb2.append(actual_card.charAt(6));
+						String c2 = sb2.toString();
+
+						if (valorCarta(actual_card.charAt(1)) < valorCarta(actual_card.charAt(5))) {
+							String aux = c1;
+							c1 = c2;
+							c2 = aux;
+						}
+						
+						boolean enc = false;
+						for (int i = 0; i < 13 && !enc; i++) {
+						for (int j = i + 1; j < 13 && !enc; j++) {
+							if (jtbArray[i][j].getText().equals(c1)) {
+									
+								for (int k = j; k < 13 && !enc; k++) {
+									String actual = jtbArray[i][k].getText();		
+									jtbArray[i][k].setSelected(true);
+									cambiarColorBoton(jtbArray[i][k], false, actual); 
+									if (jtbArray[i][k].getText().equals(c2))
+										enc= true;
+								}	
+								enc = true;
+							}
+						}}	
+					} else if (actual_card.charAt(2) == 'o' && actual_card.charAt(6) == 'o') {
+						sb1.append(actual_card.charAt(2));
+						String c1 = sb1.toString();
+						sb2.append(actual_card.charAt(6));
+						String c2 = sb2.toString();
+
+						if (valorCarta(actual_card.charAt(1)) < valorCarta(actual_card.charAt(5))) {
+							String aux = c1;
+							c1 = c2;
+							c2 = aux;
+						}
+						
+						boolean enc = false;
+						for (int i = 0; i < 13 && !enc; i++) {
+						for (int j = 0; j < i  && !enc; j++) {
+							if (jtbArray[i][j].getText().equals(c1)) {
+									
+								for (int k = i; k < 13 && !enc; k++) {
+									String actual = jtbArray[k][j].getText();		
+									jtbArray[k][j].setSelected(true);
+									cambiarColorBoton(jtbArray[k][j], false, actual); 
+									if (jtbArray[k][j].getText().equals(c2))
+										enc= true;
+								}	
+								enc = true;
+							}
+						}}	
+					} 
+				}
 			}
 		}	
-
-		//Ordenar AA AKs AQs
-		//Comprobar longitud string
-		//Si la longitud es 2
-		//	Comprueba si hay otra pareja y hace la diagonal
-		//Si la longitud es 3
-		//	Comprobar el 3 carcter (charAt(2))	
-		//		Si es == o
-		//			Si hay otra carta con el caracter 1 charAt(0) igual
-		//				Hace barrido en columna y colorea entre medias	
-		//		Si es == s
-		//			Si hay otra carta con el caracter 1 charAt(0) igual
-		//				Hace barrido en fila y colorea entre medias	
 	}
 
 	@Override 
@@ -211,16 +361,9 @@ public class PanelIzquierdo extends JPanel implements Observador {
 		for (int i = 0; i < 13; i++) {
 		for (int j = 0; j < 13; j++) {
 			JToggleButton jtb = jtbArray[i][j];
+			cambiarColorBoton(jtb, false, jtb.getText()); 
+			jtb.setSelected(false);
 			jtb.setForeground(Color.BLACK);
-
-			if (jtb.getText().charAt(0) == jtb.getText().charAt(1))
-				jtb.setBackground(new Color(200, 224, 255));
-			else if (jtb.getText().charAt(2) == 's')
-				jtb.setBackground(new Color(255, 241, 155));
-			else
-				jtb.setBackground(new Color(255, 197, 187));
-			//cambiarColorBoton(jtb, false, jtb.getText()); 
-			//System.out.println(jtb.getText());
 		}}
 	}
 

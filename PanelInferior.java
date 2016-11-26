@@ -30,6 +30,7 @@ public class PanelInferior extends JPanel implements Observador {
 		btnClear = new JButton("Clear");
 
 		txtCartasBoard.setEditable(false);
+		txtCartasEnMano.setEditable(false);
 
 		btnRango.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -107,8 +108,13 @@ public class PanelInferior extends JPanel implements Observador {
 		mostrarTextOnBoard(cards_onHand, txtCartasEnMano_orig);
 	}
 
+	@Override public void onClearCards() {
+		cards_onHand.clear();
+		mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
+		mostrarTextOnBoard(cards_onHand, txtCartasEnMano_orig);
+	}
+
 	@Override public void onSliderChange(final int value) {}
 	@Override public void onRangeProccess(final ArrayList<String> cards) {}
-	@Override public void onClearCards() {}
 }
 
