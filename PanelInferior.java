@@ -16,18 +16,10 @@ public class PanelInferior extends JPanel implements Observador {
 	private ArrayList<String> cards_onBoard;
 	private ArrayList<String> cards_onHand;
 
-	private ArrayList<String> cards_suited;
-	private ArrayList<String> cards_offsuited;
-	private ArrayList<String> cards_diagonal;
-
 	public PanelInferior(Controlador control) {
 		this.control = control;
 		cards_onHand  = new ArrayList<String>();
 		cards_onBoard = new ArrayList<String>();
-
-		cards_suited    = new ArrayList<String>();
-		cards_diagonal  = new ArrayList<String>();
-		cards_offsuited = new ArrayList<String>();
 
 		txtCartasBoard		 = new JTextField(30);
 		txtCartasEnMano		 = new JTextField(30);
@@ -82,23 +74,41 @@ public class PanelInferior extends JPanel implements Observador {
 		jtf.setText(cards_text);
 	}
 
-	@Override
-	public void onSelectCard(final String card) { 
-		boolean enc = false;
-		for (int i = 0; i < cards_onHand.size() && !enc; i++) {
-			if (cards_onHand.get(i).equals(card))
-				enc = true;
-		}
-		if (!enc) {
-			cards_onHand.add(card);
-			//mostrarTextOnBoard(cards_onHand, txtCartasEnMano_orig);
-			mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
+    private char valorCarta(int num) {
+        char letra;
 
-			for (int i = 0; i < cards_onHand.size(); i++) {
-				if (cards_onHand.get(i).length() == 2) 
-					cards_diagonal.add(cards_onHand.get(i));	
-			}
-		}
+        switch (num) {
+            case 10:
+                letra = 'T';
+                break;
+            case 11:
+                letra = 'J';
+                break;
+            case 12:
+                letra = 'Q';
+                break;
+            case 13:
+                letra = 'K';
+                break;
+            case 14:
+                letra = 'A';
+                break;
+			default:
+				letra = Integer.toString(num).charAt(0);
+        }
+
+        return letra;
+    }
+
+	@Override public void onShowText(final String card) {
+		cards_onHand.add(card);
+		mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
+	}
+
+	@Override
+	public void onSelectCard(final String text) { 
+		txtCartasEnMano_orig.setText(text);
+
 	}
 
 	@Override
@@ -117,14 +127,10 @@ public class PanelInferior extends JPanel implements Observador {
 	@Override public void onDeselectCard(final String card) {
 		cards_onHand.remove(card);	
 		mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
-		mostrarTextOnBoard(cards_onHand, txtCartasEnMano_orig);
 	}
 
 	@Override public void onClearCards() {
 		cards_onHand.clear();
-		cards_suited.clear();
-		cards_diagonal.clear();
-		cards_offsuited.clear();
 		mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
 		mostrarTextOnBoard(cards_onHand, txtCartasEnMano_orig);
 	}

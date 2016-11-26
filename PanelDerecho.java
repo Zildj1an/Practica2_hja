@@ -49,8 +49,9 @@ public class PanelDerecho extends JPanel implements Observador {
 		this.control.addObservador(this);
 	}
 
+	@Override public void onShowText(final String card) {}
 	@Override public void onSliderChange(int value) {}
-	@Override public void onSelectCard(final String card) {}
+	@Override public void onSelectCard(final String text) {}
 	@Override public void onSelectCardBoard(final String card) {} 
 	@Override public void onDeselectCardBoard(final String card) {}
 	@Override public void onDeselectCard(final String card) {}

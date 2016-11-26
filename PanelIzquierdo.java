@@ -24,14 +24,23 @@ public class PanelIzquierdo extends JPanel implements Observador {
 	private JLabel lblPorcentajeVer;
 	private JLabel lblPorcentajeHor;
 
-	private JToggleButton[][] jtbArray;	
+	private ArrayList<String> cards_onHand;
+	private ArrayList<String> cards_suited;
+	private ArrayList<String> cards_diagonal;
+	private ArrayList<String> cards_offsuited;
 
+	private JToggleButton[][] jtbArray;	
 
 	public PanelIzquierdo(Controlador control) {
 		this.control = control;
 		setLayout(new BorderLayout()); 
 		setBorder(BorderFactory.createEmptyBorder(2, 2, 0, 0));
 		this.jtbArray = new JToggleButton[13][13];
+
+		cards_onHand = new ArrayList<String>();
+		cards_suited = new ArrayList<String>();
+		cards_diagonal = new ArrayList<String>();
+		cards_offsuited = new ArrayList<String>();
 
 		generarPanelBotones();
 		generarSliders();
@@ -65,9 +74,11 @@ public class PanelIzquierdo extends JPanel implements Observador {
 				public void actionPerformed(ActionEvent actionEvent) {
 					JToggleButton jtb1 = (JToggleButton)actionEvent.getSource();
 					if (jtb.isSelected()) { 
+						cards_onHand.add(jtb1.getText());
 						control.poner(jtb1.getText(), "hand");	
 						jtb.setForeground(Color.WHITE);
 					} else { 
+						cards_onHand.remove(jtb1.getText());
 						control.desponer(jtb1.getText(), "hand");	
 						jtb.setForeground(Color.BLACK);
 					}
@@ -367,7 +378,97 @@ public class PanelIzquierdo extends JPanel implements Observador {
 		}}
 	}
 
-	@Override public void onSelectCard(final String card) {}
+	@Override public void onShowText(final String card) {
+		for (int i = 0; i < cards_onHand.size(); i++) {
+			if (cards_onHand.get(i).length() == 2) 
+				cards_diagonal.add(cards_onHand.get(i));	
+			else {
+				if (cards_onHand.get(i).charAt(2) == 's')
+					cards_suited.add(cards_onHand.get(i));
+				else
+					cards_offsuited.add(cards_onHand.get(i));
+			}
+		}
+		
+		StringBuilder texto = new StringBuilder();
+		if (cards_diagonal.size() != 0) {
+			//Comprobar individuales 
+			for (int i = 0; i < 13; i++) {
+				if (i == 0) {
+					if (jtbArray[i][i].isSelected() && !jtbArray[i+1][i+1].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[i][i].getText());
+						i = i+1;
+					}
+				} else if (i < 12) {
+					if (jtbArray[i][i].isSelected() && !jtbArray[i+1][i+1].isSelected() && !jtbArray[i-1][i-1].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[i][i].getText());
+						i = i+1;
+					}
+				} else {
+					if (jtbArray[i][i].isSelected() && !jtbArray[i-1][i-1].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[i][i].getText());
+					}
+				
+				}
+			}
+
+			// Comprobar el +
+			int cont = 0;
+			if (jtbArray[0][0].isSelected()) {
+				boolean enc = false;
+				for (int i = 1; i < 13 && !enc; i++) {
+					if (jtbArray[i][i].isSelected()) 
+						cont += 1;
+					else
+						enc = true;
+				}
+				// Encontró rango con +
+				if (cont > 0) {
+					StringBuilder sb = new StringBuilder();
+					if (texto.length() > 0)
+						sb.append(", ");
+					sb.append(jtbArray[cont][cont].getText());
+					sb.append("+");
+					texto.append(sb.toString());
+				}
+			} 
+				
+			// Comprobar el -
+			for (int i = cont; i < 13; i++) {
+				int cont2 = 0;
+				boolean enc = false;
+				if (jtbArray[i][i].isSelected()) {
+					for (int j = i + 1; j < 13 && !enc; j++) {
+						if (jtbArray[j][j].isSelected()) 
+							cont2 +=1;
+						else
+							enc = true;
+					}	
+					// Encontró rango con -
+					if (cont2 > 0) {
+						StringBuilder sb = new StringBuilder();
+						if (texto.length() > 0)
+							sb.append(", ");
+						sb.append(jtbArray[i][i].getText());
+						sb.append("-");
+						sb.append(jtbArray[cont2+i][cont2+i].getText());
+						texto.append(sb.toString());
+
+						i = cont2 + i;
+					} 
+				}
+			}
+		}
+
+		control.mostrar(texto.toString());
+	}
+	@Override public void onSelectCard(final String text) {}
 	@Override public void onDeselectCardBoard(final String card) {}
 	@Override public void onDeselectCard(final String card) {}
 	@Override public void onSliderChange(final int value) {}

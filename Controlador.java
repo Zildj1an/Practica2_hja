@@ -12,14 +12,19 @@ public class Controlador {
 		observadores.add(ob);
 	}
 
-	public void poner(String combo, String tablero) {
+	public void poner(String card, String tablero) {
 		if (tablero == "board") {
 			for (Observador ob : observadores)
-				ob.onSelectCardBoard(combo);
+				ob.onSelectCardBoard(card);
 		} else if (tablero == "hand") {
 			for (Observador ob : observadores)
-				ob.onSelectCard(combo);
+				ob.onShowText(card);
 		}
+	}
+
+	public void mostrar(String text) {
+		for (Observador ob : observadores)
+			ob.onSelectCard(text);
 	}
 
 	public void desponer(String card, String tablero) {
@@ -28,7 +33,7 @@ public class Controlador {
 				ob.onDeselectCardBoard(card);
 		} else if (tablero == "hand") {
 			for (Observador ob : observadores)
-				ob.onDeselectCard(card);
+				ob.onShowText(card);
 		}
 	}
 
