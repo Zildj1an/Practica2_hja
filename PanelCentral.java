@@ -218,12 +218,24 @@ public class PanelCentral extends JPanel implements Observador {
         return letra;
     }
 
+	@Override public void onClearCards() {
+		for (int i = 0; i < btns.size(); i++) {
+			if (btns.get(i).isSelected()) {
+				cambiarColorBoton(btns.get(i), true, btns.get(i).getText().charAt(1));
+				control.desponer(btns.get(i).getText(), "board");	
+				btns.get(i).setSelected(false);
+				btns.get(i).setForeground(Color.BLACK);
+			}
+			if (!btns.get(i).isEnabled())
+				btns.get(i).setEnabled(true);
+		}
+		num_cards_selected = 0;	
+	}
 	@Override public void onSelectCard(final String card) {}
 	@Override public void onSliderChange(final int value) {}
 	@Override public void onSelectCardBoard(final String card) {} 
 	@Override public void onDeselectCardBoard(final String card) {}
 	@Override public void onDeselectCard(final String card) {}
 	@Override public void onRangeProccess(final ArrayList<String> cards) {}
-	@Override public void onClearCards() {}
 }
 

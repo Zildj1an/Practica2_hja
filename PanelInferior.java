@@ -16,15 +16,22 @@ public class PanelInferior extends JPanel implements Observador {
 	private ArrayList<String> cards_onBoard;
 	private ArrayList<String> cards_onHand;
 
+	private ArrayList<String> cards_suited;
+	private ArrayList<String> cards_offsuited;
+	private ArrayList<String> cards_diagonal;
 
 	public PanelInferior(Controlador control) {
 		this.control = control;
-		cards_onBoard = new ArrayList<String>();
 		cards_onHand  = new ArrayList<String>();
+		cards_onBoard = new ArrayList<String>();
 
-		txtCartasEnMano_orig = new JTextField(30);
-		txtCartasEnMano		 = new JTextField(30);
+		cards_suited    = new ArrayList<String>();
+		cards_diagonal  = new ArrayList<String>();
+		cards_offsuited = new ArrayList<String>();
+
 		txtCartasBoard		 = new JTextField(30);
+		txtCartasEnMano		 = new JTextField(30);
+		txtCartasEnMano_orig = new JTextField(30);
 
 		btnRango = new JButton("Procesa");
 		btnClear = new JButton("Clear");
@@ -84,8 +91,13 @@ public class PanelInferior extends JPanel implements Observador {
 		}
 		if (!enc) {
 			cards_onHand.add(card);
-			mostrarTextOnBoard(cards_onHand, txtCartasEnMano_orig);
+			//mostrarTextOnBoard(cards_onHand, txtCartasEnMano_orig);
 			mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
+
+			for (int i = 0; i < cards_onHand.size(); i++) {
+				if (cards_onHand.get(i).length() == 2) 
+					cards_diagonal.add(cards_onHand.get(i));	
+			}
 		}
 	}
 
@@ -110,6 +122,9 @@ public class PanelInferior extends JPanel implements Observador {
 
 	@Override public void onClearCards() {
 		cards_onHand.clear();
+		cards_suited.clear();
+		cards_diagonal.clear();
+		cards_offsuited.clear();
 		mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
 		mostrarTextOnBoard(cards_onHand, txtCartasEnMano_orig);
 	}
