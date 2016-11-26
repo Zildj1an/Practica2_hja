@@ -25,7 +25,7 @@ public class PanelIzquierdo extends JPanel implements Observador {
 	private JLabel lblPorcentajeHor;
 
 	private ArrayList<String> cards_onHand;
-	private ArrayList<String> cards_suited;
+	private ArrayList<String> cards_suites;
 	private ArrayList<String> cards_diagonal;
 	private ArrayList<String> cards_offsuited;
 
@@ -38,7 +38,7 @@ public class PanelIzquierdo extends JPanel implements Observador {
 		this.jtbArray = new JToggleButton[13][13];
 
 		cards_onHand = new ArrayList<String>();
-		cards_suited = new ArrayList<String>();
+		cards_suites = new ArrayList<String>();
 		cards_diagonal = new ArrayList<String>();
 		cards_offsuited = new ArrayList<String>();
 
@@ -378,46 +378,8 @@ public class PanelIzquierdo extends JPanel implements Observador {
 		}}
 	}
 
-	@Override public void onShowText(final String card) {
-		for (int i = 0; i < cards_onHand.size(); i++) {
-			if (cards_onHand.get(i).length() == 2) 
-				cards_diagonal.add(cards_onHand.get(i));	
-			else {
-				if (cards_onHand.get(i).charAt(2) == 's')
-					cards_suited.add(cards_onHand.get(i));
-				else
-					cards_offsuited.add(cards_onHand.get(i));
-			}
-		}
-		
-		StringBuilder texto = new StringBuilder();
+	private void checkDiagonalToText(StringBuilder texto) {
 		if (cards_diagonal.size() != 0) {
-			//Comprobar individuales 
-			for (int i = 0; i < 13; i++) {
-				if (i == 0) {
-					if (jtbArray[i][i].isSelected() && !jtbArray[i+1][i+1].isSelected()) {
-						if (texto.length() > 0)
-							texto.append(", ");
-						texto.append(jtbArray[i][i].getText());
-						i = i+1;
-					}
-				} else if (i < 12) {
-					if (jtbArray[i][i].isSelected() && !jtbArray[i+1][i+1].isSelected() && !jtbArray[i-1][i-1].isSelected()) {
-						if (texto.length() > 0)
-							texto.append(", ");
-						texto.append(jtbArray[i][i].getText());
-						i = i+1;
-					}
-				} else {
-					if (jtbArray[i][i].isSelected() && !jtbArray[i-1][i-1].isSelected()) {
-						if (texto.length() > 0)
-							texto.append(", ");
-						texto.append(jtbArray[i][i].getText());
-					}
-				
-				}
-			}
-
 			// Comprobar el +
 			int cont = 0;
 			if (jtbArray[0][0].isSelected()) {
@@ -464,9 +426,220 @@ public class PanelIzquierdo extends JPanel implements Observador {
 					} 
 				}
 			}
+			
+			//Comprobar individuales 
+			for (int i = 0; i < 13; i++) {
+				if (i == 0) {
+					if (jtbArray[i][i].isSelected() && !jtbArray[i+1][i+1].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[i][i].getText());
+						i = i+1;
+					}
+				} else if (i < 12) {
+					if (jtbArray[i][i].isSelected() && !jtbArray[i+1][i+1].isSelected() && !jtbArray[i-1][i-1].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[i][i].getText());
+						i = i+1;
+					}
+				} else {
+					if (jtbArray[i][i].isSelected() && !jtbArray[i-1][i-1].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[i][i].getText());
+					}
+				}
+			}
 		}
+	}
 
-		control.mostrar(texto.toString());
+	private void checkSuitesToText(StringBuilder texto) {
+		if (cards_suites.size() != 0) {
+			// Comprobar el +
+			int cont = 0;
+			for (int i = 0; i < 11; i++) {
+				cont = 0;
+				if (jtbArray[i][i+1].isSelected()) {
+					boolean enc = false;
+					for (int j = i+2; j < 13 && !enc; j++) {
+						if (jtbArray[i][j].isSelected()) 
+							cont += 1;
+						else
+							enc = true;
+					}
+					 //Encontró rango con +
+					if (cont > 0) {
+						StringBuilder sb = new StringBuilder();
+						if (texto.length() > 0)
+							sb.append(", ");
+						sb.append(jtbArray[i][i+cont+1].getText());
+						sb.append("+");
+						texto.append(sb.toString());
+					}
+				} 
+
+				// Comprobar el -
+				for (int j = i + 2 + cont; j < 13; j++) {
+					int cont2 = 0;
+					boolean enc = false;
+					if (jtbArray[i][j].isSelected()) {
+						for (int k = j + 1; k < 13 && !enc; k++) {
+							if (jtbArray[i][k].isSelected()) 
+								cont2 +=1;
+							else
+								enc = true;
+						}	
+						// Encontró rango con -
+						if (cont2 > 0) {
+							StringBuilder sb = new StringBuilder();
+							if (texto.length() > 0)
+								sb.append(", ");
+							sb.append(jtbArray[i][j].getText());
+							sb.append("-");
+							sb.append(jtbArray[i][cont2+j].getText());
+							texto.append(sb.toString());
+
+							j = cont2 + j;
+							//System.out.println(cont2 + " - " + j);
+						} 
+					}
+				}
+			}
+
+			//Comprobar individuales 
+			for (int i = 0; i < 13; i++) {
+			for (int j = i+1; j < 13; j++) {
+				if (j == i+1 && i < 11) {
+					if (jtbArray[i][j].isSelected() && !jtbArray[i][j+1].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[i][j].getText());
+						j = j+1;
+					}
+				} else if (j < 12) {
+					if (jtbArray[i][j].isSelected() && !jtbArray[i][j+1].isSelected() && !jtbArray[i][j-1].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[i][j].getText());
+						j = j+1;
+					}
+				} else {
+					if (jtbArray[i][j].isSelected() && !jtbArray[i][j-1].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[i][j].getText());
+					}
+				}
+			}}
+		}
+	}
+
+	private void checkOffsuitesToText(StringBuilder texto) {
+		if (cards_offsuited.size() != 0) {
+			//Comprobar el +
+			int cont = 0;
+			for (int j = 1; j < 13; j++) {
+				cont = 0;
+				if (jtbArray[j][j-1].isSelected()) {
+					boolean enc = false;
+					for (int i = j+1; i < 13 && !enc; i++) {
+						if (jtbArray[i][j-1].isSelected()) 
+							cont += 1;
+						else
+							enc = true;
+					}
+					//Encontró rango con +
+					if (cont > 0) {
+						StringBuilder sb = new StringBuilder();
+						if (texto.length() > 0)
+							sb.append(", ");
+						sb.append(jtbArray[j+cont][j-1].getText());
+						sb.append("+");
+						texto.append(sb.toString());
+					}
+				} 
+
+				// Comprobar con -
+				for (int i = j + 1 + cont; i < 13; i++) {
+					int cont2 = 0;
+					boolean enc = false;
+					if (jtbArray[i][j-1].isSelected()) {
+						//System.out.println(i + " - " + j);
+						for (int k = i+1; k < 13 && !enc; k++) {
+							if (jtbArray[k][j-1].isSelected()) { 
+								cont2 +=1;
+							} else
+								enc = true;
+						}	
+
+						 //Encontró rango con -
+						if (cont2 > 0) {
+							StringBuilder sb = new StringBuilder();
+							if (texto.length() > 0)
+								sb.append(", ");
+							sb.append(jtbArray[i][j-1].getText());
+							sb.append("-");
+							sb.append(jtbArray[i+cont2][j-1].getText());
+							texto.append(sb.toString());
+
+							i = cont2 + i;
+							System.out.println(i);
+						} 
+					}
+				}
+			}
+
+			//Comprobar individuales 
+			for (int i = 0; i < 12; i++)  {
+			for (int j = i + 1; j < 13;  j++) {
+				if (j == i && i < 12) {
+					if (jtbArray[j][i].isSelected() && !jtbArray[j+1][i].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[j][i].getText());
+						j = j+1;
+					}
+				} else if (j < 12) {
+					if (jtbArray[j][i].isSelected() && !jtbArray[j+1][i].isSelected() && !jtbArray[j-1][i].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[j][i].getText());
+						j = j+1;
+					}
+				} else {
+					if (jtbArray[j][i].isSelected() && !jtbArray[j-1][i].isSelected()) {
+						if (texto.length() > 0)
+							texto.append(", ");
+						texto.append(jtbArray[j][i].getText());
+					}
+				
+				}
+			}}
+
+
+		}
+	
+
+	}
+
+	@Override public void onShowText(final String card) {
+		for (int i = 0; i < cards_onHand.size(); i++) {
+			if (cards_onHand.get(i).length() == 2) 
+				cards_diagonal.add(cards_onHand.get(i));	
+			else {
+				if (cards_onHand.get(i).charAt(2) == 's')
+					cards_suites.add(cards_onHand.get(i));
+				else
+					cards_offsuited.add(cards_onHand.get(i));
+			}
+		}
+		StringBuilder sb = new StringBuilder();
+		checkDiagonalToText(sb);
+		checkSuitesToText(sb);	
+		checkOffsuitesToText(sb);
+
+		control.mostrar(sb.toString());
 	}
 	@Override public void onSelectCard(final String text) {}
 	@Override public void onDeselectCardBoard(final String card) {}
