@@ -166,8 +166,11 @@ public class PanelInferior extends JPanel implements Observador {
 				sb.append(cards_onBoard.get(i));
 
 			calcularCombos.calcular(cards_onHand_sinSignos, sb.toString());
+			control.mostrarResultado(calcularCombos);
+			
 		}
 	}
 	@Override public void onSliderChange(final int value) {}
+	@Override public void onShowResults(CalcularCombos calcularCombos) {}
 }
 

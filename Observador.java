@@ -10,4 +10,5 @@ public interface Observador {
 	public void onAddCardHand(final String card);
 	public void onRangeProcessShow(final ArrayList<String> cards); 
 	public void onClearCards(boolean hands);
+	public void onShowResults(CalcularCombos calcularCombos);
 }

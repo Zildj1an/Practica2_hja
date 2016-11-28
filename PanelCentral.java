@@ -25,16 +25,16 @@ public class PanelCentral extends JPanel implements Observador {
 		this.max_cards_selected = 5;
 		this.btns = new ArrayList<JToggleButton>();
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(300, 480));	
+		setPreferredSize(new Dimension(100, 480));	
 		setBorder(BorderFactory.createEmptyBorder(2, 15, 0, 0));
 
 		cards_onBoard = new String[5];
 
 		generarPanelCartas();
-		generarPanelDatos();
+		//generarPanelDatos();
 
 		add(pnlCartas, BorderLayout.WEST);
-		add(pnlDatos, BorderLayout.CENTER);
+		//add(pnlDatos, BorderLayout.CENTER);
 
 		this.control.addObservador(this);
 	}
@@ -146,49 +146,49 @@ public class PanelCentral extends JPanel implements Observador {
 		pnlDatos.setLayout(new BoxLayout(pnlDatos, BoxLayout.Y_AXIS));
 
 		int marginLeft = 20;
-		JLabel lbl1  = new JLabel("Straight flush");
-		lbl1.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl2 = new JLabel("Four of a Kind");
-		lbl2.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl3 = new JLabel("Full house");
-		lbl3.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl4  = new JLabel("flush");
-		lbl4.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl5  = new JLabel("straight");
-		lbl5.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl6  = new JLabel("set");
-		lbl6.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl7  = new JLabel("two pair");
-		lbl7.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl8  = new JLabel("overpair");
-		lbl8.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl9  = new JLabel("top pair");
-		lbl9.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl10  = new JLabel("pp below tp");
-		lbl10.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl11  = new JLabel("middle pair");
-		lbl11.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl12  = new JLabel("weak pair");
-		lbl12.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl13 = new JLabel("ace high");
-		lbl13.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
-		JLabel lbl14 = new JLabel("no made hand");
-		lbl14.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl1  = new JLabel("Straight flush");
+		//lbl1.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl2 = new JLabel("Four of a Kind");
+		//lbl2.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl3 = new JLabel("Full house");
+		//lbl3.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl4  = new JLabel("flush");
+		//lbl4.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl5  = new JLabel("straight");
+		//lbl5.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl6  = new JLabel("set");
+		//lbl6.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl7  = new JLabel("two pair");
+		//lbl7.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl8  = new JLabel("overpair");
+		//lbl8.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl9  = new JLabel("top pair");
+		//lbl9.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl10  = new JLabel("pp below tp");
+		//lbl10.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl11  = new JLabel("middle pair");
+		//lbl11.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl12  = new JLabel("weak pair");
+		//lbl12.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl13 = new JLabel("ace high");
+		//lbl13.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
+		//JLabel lbl14 = new JLabel("no made hand");
+		//lbl14.setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, 0));
 
-		pnlDatos.add(lbl1);
-		pnlDatos.add(lbl2);
-		pnlDatos.add(lbl3);
-		pnlDatos.add(lbl4);
-		pnlDatos.add(lbl5);
-		pnlDatos.add(lbl6);
-		pnlDatos.add(lbl7);
-		pnlDatos.add(lbl8);
-		pnlDatos.add(lbl9);
-		pnlDatos.add(lbl10);
-		pnlDatos.add(lbl11);
-		pnlDatos.add(lbl12);
-		pnlDatos.add(lbl13);
-		pnlDatos.add(lbl14);
+		//pnlDatos.add(lbl1);
+		//pnlDatos.add(lbl2);
+		//pnlDatos.add(lbl3);
+		//pnlDatos.add(lbl4);
+		//pnlDatos.add(lbl5);
+		//pnlDatos.add(lbl6);
+		//pnlDatos.add(lbl7);
+		//pnlDatos.add(lbl8);
+		//pnlDatos.add(lbl9);
+		//pnlDatos.add(lbl10);
+		//pnlDatos.add(lbl11);
+		//pnlDatos.add(lbl12);
+		//pnlDatos.add(lbl13);
+		//pnlDatos.add(lbl14);
 
 	}
 
@@ -234,6 +234,7 @@ public class PanelCentral extends JPanel implements Observador {
 		}
 	}
 
+	@Override public void onShowResults(CalcularCombos calcularCombos) {}
 	@Override public void onRangeProcessShow(final ArrayList<String> cards) {} 
 	@Override public void onAddCardHand(final String card) {}
 	@Override public void onShowText(final String card) {}

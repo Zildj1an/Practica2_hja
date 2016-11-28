@@ -57,4 +57,9 @@ public class Controlador {
 		for (Observador ob : observadores)
 			ob.onRangeProcessShow(cards);
 	}
+
+	public void mostrarResultado(CalcularCombos calcularCombos) {
+		for (Observador ob : observadores)
+			ob.onShowResults(calcularCombos);
+	}
 }

@@ -32,7 +32,7 @@ public class VistaPoker extends JFrame {
 	}
 
 	private void setWindowProperties() {
-		setSize(1400, 600);
+		setSize(1500, 600);
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);

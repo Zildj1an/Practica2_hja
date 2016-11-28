@@ -55,8 +55,8 @@ public class PanelIzquierdo extends JPanel implements Observador {
 
 		this.control.addObservador(this);
                 
-                iCartas = 0;
-                ik = 0;
+		iCartas = 0;
+		ik = 0;
 	}
 
 	private void generarPanelBotones() {
@@ -197,9 +197,6 @@ public class PanelIzquierdo extends JPanel implements Observador {
             
             if(iCartas <= nCartas){
                 while (iCartas < nCartas){
-                    //System.out.println(ik);
-                    //System.out.println(iCartas);
-                    //System.out.println(nCartas);
                     seleccionarCarta(skla[ik]);
                     control.poner(skla[ik], "hand");
                     if(skla[ik].length() == 2){
@@ -671,7 +668,6 @@ public class PanelIzquierdo extends JPanel implements Observador {
 							texto.append(sb.toString());
 
 							i = cont2 + i;
-							//System.out.println(i);
 						} 
 					}
 				}
@@ -735,6 +731,7 @@ public class PanelIzquierdo extends JPanel implements Observador {
 		lblPorcentajeHor.setText(String.valueOf(df.format(number)) + "%");
 	}
 
+	@Override public void onShowResults(CalcularCombos calcularCombos) {}
 	@Override public void onRangeProcessShow(final ArrayList<String> cards) {}
 	@Override public void onAddCardHand(final String card) {}
 	@Override public void onSelectCard(final String text) {}

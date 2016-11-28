@@ -13,42 +13,216 @@ public class PanelDerecho extends JPanel implements Observador {
 	private JLabel lblTexto6;
 	private JLabel lblTexto7;
 	private Controlador control;
+	private CalcularCombos combos;
+
+	private JLabel lblTxt; 
+	private JLabel lblTxt1; 
+	private JLabel lblTxt2; 
+	private JLabel lblTxt3; 
+	private JLabel lblTxt4; 
+	private JLabel lblTxt5; 
+	private JLabel lblTxt6; 
+	private JLabel lblTxt7; 
+	private JLabel lblTxt8; 
+	private JLabel lblTxt9; 
+	private JLabel lblTxt10; 
+	private JLabel lblTxt11; 
+
+	private ArrayList<JLabel> lbls;
 
 	public PanelDerecho(Controlador control) {
 		this.control = control;
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setPreferredSize(new Dimension(300, 480));	
-		setAlignmentX(Component.LEFT_ALIGNMENT);
+		this.lbls = new ArrayList<JLabel>();
 		int marginLeft = 20, marginRight = 15, marginTop = 2;
+		
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setPreferredSize(new Dimension(420, 480));	
+		setAlignmentX(Component.LEFT_ALIGNMENT);
+		this.setBorder(BorderFactory.createLineBorder(Color.black));
 
-		lblTexto1 = new JLabel("Hay que ajustar el ancho al texto");
-		lblTexto1.setBorder(BorderFactory.createEmptyBorder(5, marginLeft, 0, marginRight));
+		JLabel titulo = new JLabel("STATICS");
+		titulo.setFont(new Font("Serif", Font.BOLD, 16));
+		titulo.setForeground(Color.BLUE);
+		add(titulo);
 
-		lblTexto2= new JLabel("Texto a mostrar 2");
-		lblTexto2.setBorder(BorderFactory.createEmptyBorder(marginTop, marginLeft, 0, marginRight));
-		
-		lblTexto3 = new JLabel("Texto a mostrar 3");
-		lblTexto3.setBorder(BorderFactory.createEmptyBorder(marginTop, marginLeft, 0, marginRight));
-		
-		lblTexto4 = new JLabel("Texto a mostrar 4");
-		lblTexto4.setBorder(BorderFactory.createEmptyBorder(marginTop, marginLeft, 0, marginRight));
-		
-		lblTexto5 = new JLabel("Texto a mostrar 5");
-		lblTexto5.setBorder(BorderFactory.createEmptyBorder(marginTop, marginLeft, 0, marginRight));
-		
-		lblTexto6 = new JLabel("Texto a mostrar 6");
-		lblTexto6.setBorder(BorderFactory.createEmptyBorder(marginTop, marginLeft, 0, marginRight));
+		lblTxt   = new JLabel(); //">= str. flush"); // Escalera de color 
+		lblTxt1  = new JLabel(); //"flush");  // Color
+		lblTxt2  = new JLabel(); //"straight"); // Escalera
+		lblTxt3  = new JLabel(); //"set"); 
+		lblTxt4  = new JLabel(); //"two pair"); 
+		lblTxt5  = new JLabel(); //"overpair"); 
+		lblTxt6  = new JLabel(); //"top pair");  // Pareja
+		lblTxt7  = new JLabel(); //"pp below tp");  // Pareja
+		lblTxt8  = new JLabel(); //"middle pair"); // Pareja
+		lblTxt9  = new JLabel(); //"weak pair"); // Pareja
+		lblTxt10 = new JLabel(); //"ace high");	// Carta alta 
+		lblTxt11 = new JLabel(); //"no made hand");  // No made hand
 
-		add(lblTexto1);
-		add(lblTexto2);
-		add(lblTexto3);
-		add(lblTexto4);
-		add(lblTexto5);
-		add(lblTexto6);
+		lbls.add(lblTxt);
+		lbls.add(lblTxt1);
+		lbls.add(lblTxt2);
+		lbls.add(lblTxt3);
+		lbls.add(lblTxt4);
+		lbls.add(lblTxt5);
+		lbls.add(lblTxt6);
+		lbls.add(lblTxt7);
+		lbls.add(lblTxt8);
+		lbls.add(lblTxt9);
+		lbls.add(lblTxt10);
+		lbls.add(lblTxt11);
+
+		for (int i = 0; i < lbls.size(); i++) {
+			add(lbls.get(i));
+			lbls.get(i).setBorder(BorderFactory.createEmptyBorder(0, marginLeft, 0, marginRight));
+		}
 
 		this.control.addObservador(this);
 	}
 
+	@Override public void onShowResults(CalcularCombos calcularCombos) {
+		int marginLeft = 20, marginRight = 15, marginTop = 2;
+
+		// NOMADEHAND
+		int n_nmh = calcularCombos.getNoMadeHandContador();
+		StringBuilder sb = new StringBuilder();
+		sb.append("No made hand :");
+		sb.append(n_nmh);
+		ArrayList<String> noMadeHand = calcularCombos.getNoMadeHand();
+		for (int i = 0; i < noMadeHand.size(); i++) {
+			sb.append(noMadeHand.get(i));
+			sb.append(" ");
+		}
+		if (n_nmh > 0)
+			lblTxt.setText(sb.toString());
+		//----------------------------------------------------------------------
+
+		// CARTA ALTA
+		int n_calta = calcularCombos.getCartaAltaContador();
+		StringBuilder sb1 = new StringBuilder();
+		sb1.append("Ace high:");
+		sb1.append(n_calta);
+		ArrayList<String> cartaAlta = calcularCombos.getCartaAlta();
+		for (int i = 0; i < cartaAlta.size(); i++) {
+			sb1.append(cartaAlta.get(i));
+			sb1.append(" ");
+		}
+		if (n_calta > 0)
+			lblTxt1.setText(sb1.toString());
+		//----------------------------------------------------------------------
+
+		// PAREJA
+		ArrayList<String> pareja = calcularCombos.getPareja();
+		int n_par = calcularCombos.getParejaContador();
+		StringBuilder sb2 = new StringBuilder();
+		sb2.append("Weak pair:");
+		sb2.append(n_par);
+		for (int i = 0; i < pareja.size(); i++) {
+			sb2.append(pareja.get(i));
+			sb2.append(" ");
+		}
+		if (n_par > 0)
+			lblTxt2.setText(sb2.toString());
+		//----------------------------------------------------------------------
+
+		// DOBLES PAREJAS
+		ArrayList<String> doblepareja = calcularCombos.getDoblePareja();
+		int n_dpair = calcularCombos.getDobleParejaContador();
+		StringBuilder sb3 = new StringBuilder();
+		sb3.append("Middle pair:");
+		sb3.append(n_dpair);
+		for (int i = 0; i < doblepareja.size(); i++) {
+			sb3.append(doblepareja.get(i));
+			sb3.append(" ");
+		}
+		if (n_dpair > 0)
+			lblTxt3.setText(sb3.toString());
+		//----------------------------------------------------------------------
+
+		// TRIO
+		ArrayList<String> trio = calcularCombos.getTrio();
+		int n_trio = calcularCombos.getTrioContador();
+		StringBuilder sb4 = new StringBuilder();
+		sb4.append("Trio:");
+		sb4.append(n_trio);
+		for (int i = 0; i < trio.size(); i++) {
+			sb4.append(trio.get(i));
+			sb4.append(" ");
+		}
+		if (n_trio > 0)
+			lblTxt4.setText(sb4.toString());
+		//----------------------------------------------------------------------
+
+		// ESCALERA
+		ArrayList<String> escalera = calcularCombos.getEscalera();
+		int n_esc = calcularCombos.getEscaleraContador();
+		StringBuilder sb5 = new StringBuilder();
+		sb5.append("Escalera:");
+		sb5.append(n_esc);
+		for (int i = 0; i < escalera.size(); i++) {
+			sb5.append(escalera.get(i));
+			sb5.append(" ");
+		}
+		if (n_esc > 0)
+			lblTxt5.setText(sb5.toString());
+		//----------------------------------------------------------------------
+
+
+		// COLOR
+		ArrayList<String> color = calcularCombos.getColor();
+		int n_col = calcularCombos.getColorContador();
+		StringBuilder sb6 = new StringBuilder();
+		sb6.append("Color:");
+		sb6.append(n_col);
+		for (int i = 0; i < color.size(); i++) {
+			sb6.append(color.get(i));
+			sb6.append(" ");
+		}
+		if (n_col > 0)
+			lblTxt6.setText(sb6.toString());
+		//----------------------------------------------------------------------
+
+		// FULL HOUSE
+		ArrayList<String> full = calcularCombos.getFullHouse();
+		int n_full = calcularCombos.getFullHouseContador();
+		StringBuilder sb7 = new StringBuilder();
+		sb7.append("Full:");
+		sb7.append(n_full);
+		for (int i = 0; i < full.size(); i++) {
+			sb7.append(full.get(i));
+			sb7.append(" ");
+		}
+		if (n_full > 0)
+			lblTxt7.setText(sb7.toString());
+		//----------------------------------------------------------------------
+
+		// POKER
+		ArrayList<String> poker = calcularCombos.getPoker();
+		int n_poker = calcularCombos.getPokerContador();
+		StringBuilder sb8 = new StringBuilder();
+		sb8.append("Poker:");
+		sb8.append(n_poker);
+		for (int i = 0; i < poker.size(); i++) {
+			sb8.append(full.get(i));
+			sb8.append(" ");
+		}
+		if (n_poker > 0)
+			lblTxt8.setText(sb8.toString());
+		//----------------------------------------------------------------------
+
+		// ESCALERACOLOR
+		ArrayList<String> escaleracolor = calcularCombos.getEscaleraColor();
+		int n_escCol = calcularCombos.getEscaleraColorContador();
+		StringBuilder sb9 = new StringBuilder();
+		sb9.append("Escalera color:");
+		sb9.append(n_escCol);
+		for (int i = 0; i < escaleracolor.size(); i++) {
+			sb9.append(escaleracolor.get(i));
+			sb9.append(" ");
+		}
+		if (n_escCol > 0)
+			lblTxt9.setText(sb9.toString());
+		//----------------------------------------------------------------------
+	}
 	@Override public void onRangeProcessShow(final ArrayList<String> cards) {}
 	@Override public void onAddCardHand(final String card) {}
 	@Override public void onShowText(final String card) {}
@@ -58,6 +232,9 @@ public class PanelDerecho extends JPanel implements Observador {
 	@Override public void onDeselectCardBoard(final String card) {}
 	@Override public void onDeselectCard(final String card) {}
 	@Override public void onRangeProccess(final ArrayList<String> cards) {}
-	@Override public void onClearCards(boolean hands) {}
+	@Override public void onClearCards(boolean hands) {
+		for (int i = 0; i < lbls.size(); i++) 
+			lbls.get(i).setText("");
+	}
 }
 
