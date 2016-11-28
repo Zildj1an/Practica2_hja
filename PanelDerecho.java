@@ -27,6 +27,8 @@ public class PanelDerecho extends JPanel implements Observador {
 	private JLabel lblTxt9; 
 	private JLabel lblTxt10; 
 	private JLabel lblTxt11; 
+	private JLabel lblTxt12; 
+	private JLabel lblTxt13; 
 
 	private ArrayList<JLabel> lbls;
 
@@ -38,7 +40,7 @@ public class PanelDerecho extends JPanel implements Observador {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setPreferredSize(new Dimension(420, 480));	
 		setAlignmentX(Component.LEFT_ALIGNMENT);
-		this.setBorder(BorderFactory.createLineBorder(Color.black));
+		//this.setBorder(BorderFactory.createLineBorder(Color.black));
 
 		JLabel titulo = new JLabel("STATICS");
 		titulo.setFont(new Font("Serif", Font.BOLD, 16));
@@ -57,6 +59,8 @@ public class PanelDerecho extends JPanel implements Observador {
 		lblTxt9  = new JLabel(); //"weak pair"); // Pareja
 		lblTxt10 = new JLabel(); //"ace high");	// Carta alta 
 		lblTxt11 = new JLabel(); //"no made hand");  // No made hand
+		lblTxt12 = new JLabel(); //"no made hand");  // No made hand
+		lblTxt13 = new JLabel(); //"no made hand");  // No made hand
 
 		lbls.add(lblTxt);
 		lbls.add(lblTxt1);
@@ -70,6 +74,8 @@ public class PanelDerecho extends JPanel implements Observador {
 		lbls.add(lblTxt9);
 		lbls.add(lblTxt10);
 		lbls.add(lblTxt11);
+		lbls.add(lblTxt12);
+		lbls.add(lblTxt13);
 
 		for (int i = 0; i < lbls.size(); i++) {
 			add(lbls.get(i));
@@ -110,17 +116,17 @@ public class PanelDerecho extends JPanel implements Observador {
 			lblTxt1.setText(sb1.toString());
 		//----------------------------------------------------------------------
 
-		// PAREJA
-		ArrayList<String> pareja = calcularCombos.getPareja();
-		int n_par = calcularCombos.getParejaContador();
+		// PAREJA OVERPAIR
+		ArrayList<String> overpair = calcularCombos.getOverPair();
+		int n_opair = calcularCombos.getOverPairContador();
 		StringBuilder sb2 = new StringBuilder();
-		sb2.append("Weak pair:");
-		sb2.append(n_par);
-		for (int i = 0; i < pareja.size(); i++) {
-			sb2.append(pareja.get(i));
+		sb2.append("Overpair:");
+		sb2.append(n_opair);
+		for (int i = 0; i < overpair.size(); i++) {
+			sb2.append(overpair.get(i));
 			sb2.append(" ");
 		}
-		if (n_par > 0)
+		if (n_opair > 0)
 			lblTxt2.setText(sb2.toString());
 		//----------------------------------------------------------------------
 
@@ -222,6 +228,63 @@ public class PanelDerecho extends JPanel implements Observador {
 		if (n_escCol > 0)
 			lblTxt9.setText(sb9.toString());
 		//----------------------------------------------------------------------
+
+		// PAREJA TOPPAIR 
+		ArrayList<String> toppair = calcularCombos.getTopPair();
+		int n_tpair = calcularCombos.getTopPairContador();
+		StringBuilder sb10 = new StringBuilder();
+		sb10.append("Toppair:");
+		sb10.append(n_tpair);
+		for (int i = 0; i < toppair.size(); i++) {
+			sb10.append(toppair.get(i));
+			sb10.append(" ");
+		}
+		if (n_tpair > 0)
+			lblTxt10.setText(sb10.toString());
+		//----------------------------------------------------------------------
+
+		// PAREJA POCKETPAIR
+		ArrayList<String> pocketpair = calcularCombos.getPocketPair();
+		int n_ppair = calcularCombos.getPocketPairContador();
+		StringBuilder sb11 = new StringBuilder();
+		sb11.append("Pocket pair:");
+		sb11.append(n_ppair);
+		for (int i = 0; i < pocketpair.size(); i++) {
+			sb11.append(pocketpair.get(i));
+			sb11.append(" ");
+		}
+		if (n_ppair > 0)
+			lblTxt11.setText(sb11.toString());
+		//----------------------------------------------------------------------
+
+		// PAREJA MIDDLEPAIR
+		ArrayList<String> middlepair = calcularCombos.getMiddlePair();
+		int n_mpair = calcularCombos.getMiddlePairContador();
+		StringBuilder sb12 = new StringBuilder();
+		sb12.append("Middle pair:");
+		sb12.append(n_mpair);
+		for (int i = 0; i < middlepair.size(); i++) {
+			sb12.append(middlepair.get(i));
+			sb12.append(" ");
+		}
+		if (n_mpair > 0)
+			lblTxt12.setText(sb12.toString());
+		//----------------------------------------------------------------------
+
+		// PAREJA WEAKPAIR
+		ArrayList<String> weakpair = calcularCombos.getWeakPair();
+		int n_wpair = calcularCombos.getWeakPairContador();
+		StringBuilder sb13 = new StringBuilder();
+		sb13.append("Weak pair:");
+		sb13.append(n_wpair);
+		for (int i = 0; i < weakpair.size(); i++) {
+			sb13.append(weakpair.get(i));
+			sb13.append(" ");
+		}
+		if (n_wpair > 0)
+			lblTxt13.setText(sb13.toString());
+		//----------------------------------------------------------------------
+
 	}
 	@Override public void onRangeProcessShow(final ArrayList<String> cards) {}
 	@Override public void onAddCardHand(final String card) {}

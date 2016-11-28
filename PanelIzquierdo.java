@@ -462,6 +462,8 @@ public class PanelIzquierdo extends JPanel implements Observador {
 			jtb.setSelected(false);
 			jtb.setForeground(Color.BLACK);
 		}}
+		lblPorcentajeHor.setText("0%");
+		lblPorcentajeVer.setText("0%");
 	}
 
 	private void checkDiagonalToText(StringBuilder texto) {

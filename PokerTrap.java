@@ -13,6 +13,17 @@ public class PokerTrap {
     private int contadorSinColor;
     private int contadorColorMayor;
     private int contadorColorMenor;
+    private String cartasInvolucradasSinColor;
+    private char[] cartasBoardOrdenadas;
+
+    public char[] getCartasOrdenadasBoard()
+    {
+        return cartasBoardOrdenadas;
+    }
+
+    public String getCartasInvolucradasSinColor() {
+        return cartasInvolucradasSinColor;
+    }
 
     public String getBestHandSinColor() {
         return bestHandSinColor;
@@ -36,16 +47,33 @@ public class PokerTrap {
             cartasMano += cartas[2];
         }
 
-
         return cartasMano;
     }
 
     public String getCartasEnManoColorMayor() {
-        return cartasEnManoColorMayor;
+        String cartasMano = "";
+        if(cartasEnManoColorMayor.length() != 0)
+        {
+            char[] cartas = cartasEnManoColorMayor.toCharArray();
+            cartasMano += cartas[0];
+            cartasMano += cartas[1];
+            cartasMano += cartas[2];
+        }
+
+        return cartasMano;
     }
 
     public String getCartasEnManoColorMenor() {
-        return cartasEnManoColorMenor;
+        String cartasMano = "";
+        if(cartasEnManoColorMenor.length() != 0)
+        {
+            char[] cartas = cartasEnManoColorMenor.toCharArray();
+            cartasMano += cartas[0];
+            cartasMano += cartas[2];
+            cartasMano += cartas[3];
+        }
+
+        return cartasMano;
     }
 
     public int getContadorSinColor() {
@@ -271,6 +299,7 @@ public class PokerTrap {
         System.out.println("Cartas involucradas: " + combination2);
         System.out.println("Cartas en mano: " + cartasEnManoOperativas + "\n");
         cartasEnMano2 = cartasEnManoOperativas;
+        this.cartasInvolucradasSinColor = combination2;
 
         // AQUI ACABA LA NORMAL SIN COLOR
 
@@ -370,6 +399,8 @@ public class PokerTrap {
             bestHand2 = "No made Hand";
         if(!encontrado3)
             bestHand3 = "No made Hand";
+
+        this.cartasBoardOrdenadas = mejorMano.getCartasBoardOrdenadas();
 
         // LO SIENTO YO DE MAÑANA PERO HAY QUE MIRAR QUE TENGAN QUE cartasEnManoOperativas ESTEN EN combination(CARTAS INVOLUCRADAS)
         // POR DESGRACIA TAMBIEN HAY QUE RESTAR COMBOS POR CARTAS EN BOARD

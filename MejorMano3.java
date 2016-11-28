@@ -12,7 +12,11 @@ public class MejorMano3 {
     private int rank;
     private char desempate;
     private char desempate2;
+    private char[] cartasBoardOrdenadas;
 
+    public char[] getCartasBoardOrdenadas() {
+        return cartasBoardOrdenadas;
+    }
 
     public int getDesempate(){
         return (valorCarta(desempate));
@@ -126,7 +130,7 @@ public class MejorMano3 {
                 }
             }
         }
-
+        this.cartasBoardOrdenadas = x;
         //En 7 cartas puede haber hasta 3 parejas(temporal)
         int contadorHuecoEscalera=0;
         int contadorEscalera=0;

@@ -144,6 +144,7 @@ public class PanelInferior extends JPanel implements Observador {
 
 	@Override public void onClearCards(boolean hands) {
 		if (hands) {
+			cards_onHand.clear();
 			cards_onBoard.clear();
 			mostrarTextOnBoard(cards_onBoard, txtCartasEnMano);
 		}
