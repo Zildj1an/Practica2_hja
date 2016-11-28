@@ -2,10 +2,12 @@ import java.util.ArrayList;
 
 public class Controlador {
 
+	private CalcularCombos calcularCombos;
 	private ArrayList<Observador> observadores;
 	
 	public Controlador() {
 		observadores = new ArrayList<Observador>();	
+		calcularCombos = new CalcularCombos();
 	}
 
 	public void addObservador(Observador ob) {
@@ -46,8 +48,13 @@ public class Controlador {
 			ob.onRangeProccess(cards);
 	}
 
-	public void clear() {
+	public void clear(boolean hands) {
 		for (Observador ob : observadores)
-			ob.onClearCards();
+			ob.onClearCards(hands);
+	}
+
+	public void updateText(ArrayList<String> cards) {
+		for (Observador ob : observadores)
+			ob.onRangeProcessShow(cards);
 	}
 }

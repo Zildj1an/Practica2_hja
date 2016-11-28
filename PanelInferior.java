@@ -15,11 +15,17 @@ public class PanelInferior extends JPanel implements Observador {
 
 	private ArrayList<String> cards_onBoard;
 	private ArrayList<String> cards_onHand;
+	private ArrayList<String> cards_onHand_sinSignos;
+
+	private CalcularCombos calcularCombos;
 
 	public PanelInferior(Controlador control) {
 		this.control = control;
+		calcularCombos = new CalcularCombos();
+
 		cards_onHand  = new ArrayList<String>();
 		cards_onBoard = new ArrayList<String>();
+		cards_onHand_sinSignos = new ArrayList<String>();
 
 		txtCartasBoard		 = new JTextField(30);
 		txtCartasEnMano		 = new JTextField(30);
@@ -34,15 +40,18 @@ public class PanelInferior extends JPanel implements Observador {
 		btnRango.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Parsea las cartas del jfieldtext con comas y las mete a un array
+				//String copia = txtCartasEnMano_orig.getText();
 				String [] items = txtCartasEnMano_orig.getText().split(",");
 				ArrayList<String> items_array = new ArrayList<String>();
 				for (String s : items) 
 					items_array.add(s.trim());
+				control.clear(false);
 				control.procesar(items_array);		
+				//txtCartasEnMano_orig.setText(copia);
 		}});
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				control.clear();
+				control.clear(true);
 		}});
 
 		add(txtCartasEnMano_orig);
@@ -111,6 +120,7 @@ public class PanelInferior extends JPanel implements Observador {
 
 	@Override
 	public void onSelectCard(final String text) { 
+		//txtCartasEnMano_orig.setText("");
 		txtCartasEnMano_orig.setText(text);
 	}
 
@@ -128,17 +138,36 @@ public class PanelInferior extends JPanel implements Observador {
 	}
 
 	@Override public void onDeselectCard(final String card) {
-		cards_onHand.remove(card);	
-		mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
+		//cards_onHand.remove(card);	
+		//mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
 	}
 
-	@Override public void onClearCards() {
-		cards_onHand.clear();
-		mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
+	@Override public void onClearCards(boolean hands) {
+		if (hands) {
+			cards_onBoard.clear();
+			mostrarTextOnBoard(cards_onBoard, txtCartasEnMano);
+		}
 		mostrarTextOnBoard(cards_onHand, txtCartasEnMano_orig);
 	}
 
+	@Override
+	public void onRangeProcessShow(final ArrayList<String> cards) {
+		//mostrarTextOnBoard(cards_orig, txtCartasEnMano_orig);
+		cards_onHand_sinSignos.clear();
+		for (int i = 0; i < cards.size(); i++)
+			cards_onHand_sinSignos.add(cards.get(i));
+		mostrarTextOnBoard(cards, txtCartasEnMano);
+	}
+
+	@Override public void onRangeProccess(final ArrayList<String> cards) {
+		if (cards_onBoard.size() > 2) {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < cards_onBoard.size(); i++)
+				sb.append(cards_onBoard.get(i));
+
+			calcularCombos.calcular(cards_onHand_sinSignos, sb.toString());
+		}
+	}
 	@Override public void onSliderChange(final int value) {}
-	@Override public void onRangeProccess(final ArrayList<String> cards) {}
 }
 

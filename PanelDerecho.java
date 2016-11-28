@@ -49,6 +49,7 @@ public class PanelDerecho extends JPanel implements Observador {
 		this.control.addObservador(this);
 	}
 
+	@Override public void onRangeProcessShow(final ArrayList<String> cards) {}
 	@Override public void onAddCardHand(final String card) {}
 	@Override public void onShowText(final String card) {}
 	@Override public void onSliderChange(int value) {}
@@ -57,6 +58,6 @@ public class PanelDerecho extends JPanel implements Observador {
 	@Override public void onDeselectCardBoard(final String card) {}
 	@Override public void onDeselectCard(final String card) {}
 	@Override public void onRangeProccess(final ArrayList<String> cards) {}
-	@Override public void onClearCards() {}
+	@Override public void onClearCards(boolean hands) {}
 }
 

@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import java.text.DecimalFormat;
 import javax.swing.event.*;
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +30,10 @@ public class PanelIzquierdo extends JPanel implements Observador {
 	private ArrayList<String> cards_diagonal;
 	private ArrayList<String> cards_offsuited;
 
-	private JToggleButton[][] jtbArray;	
+	private JToggleButton[][] jtbArray;
+        
+        private int iCartas;
+        private int ik;
 
 	public PanelIzquierdo(Controlador control) {
 		this.control = control;
@@ -50,6 +54,9 @@ public class PanelIzquierdo extends JPanel implements Observador {
 		add(pnlSliderInferior, BorderLayout.SOUTH);
 
 		this.control.addObservador(this);
+                
+                iCartas = 0;
+                ik = 0;
 	}
 
 	private void generarPanelBotones() {
@@ -154,12 +161,73 @@ public class PanelIzquierdo extends JPanel implements Observador {
 		sliderHor.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				lblPorcentajeHor.setText(String.valueOf(sliderHor.getValue()) + "%");
+				seleccionarRango (sliderHor.getValue());
+				cards_onHand.clear();
+				for (int i = 0; i < 13; i++) {
+				for (int j = 0; j < 13; j++) {
+					if (jtbArray[i][j].isSelected())
+						cards_onHand.add(jtbArray[i][j].getText());
+				}}
+				onShowText("");
 			}
 		});
 
 		pnlSliderInferior.add(sliderHor);
 		pnlSliderInferior.add(lblPorcentajeHor);
 	}
+        
+        private void seleccionarRango (int percent){
+            int nCartas = (percent*(78+312+936))/100;
+            
+            if(ik < 0) ik = 0;
+            
+            String[] skla = {"AA","KK","AKs","QQ","AKo","JJ","AQs","TT","AQo","99","AJs","88","ATs",
+                             "AJo","77","66","ATo","A9s","55","A8s","KQs","44","A9o","A7s","KJs","A5s",
+                             "A8o","A6s","A4s","33","KTs","A7o","A3s","KQo","A2s","A5o","A6o","A4o","KJo",
+                             "QJs","A3o","22","K9s","A2o","KTo","QTs","K8s","K7s","JTs","K9o","K6s","QJo",
+                             "Q9s","K5s","K8o","K4s","QTo","K7o","K3s","K2s","Q8s","K6o","J9s","K5o","Q9o",
+                             "JTo","K4o","Q7s","T9s","Q6s","K3o","J8s","Q5s","K2o","Q8o","Q4s","Q3s","J9o",
+                             "T8s","J7s","Q7o","Q2s","Q6o","98s","Q5o","J8o","T9o","J6s","J5s","T7s","Q4o",
+                             "J4s","J7o","Q3o","97s","J3s","T8o","T6s","Q2o","J2s","87s","J6o","98o","T7o",
+                             "96s","J5o","T5s","T4s","86s","J4o","T3s","T6o","97o","95s","76s","J3o","87o",
+                             "T2s","85s","96o","J2o","T5o","94s","75s","T4o","65s","93s","86o","95o","84s",
+                             "76o","T3o","92s","74s","54s","T2o","85o","64s","83s","94o","75o","93o","82s",
+                             "73s","65o","53s","63s","84o","92o","43s","74o","72s","54o","83o","64o","62s",
+                             "52s","42s","82o","73o","63o","53o","32s","72o","43o","62o","52o","42o","32o"};
+            
+            if(iCartas <= nCartas){
+                while (iCartas < nCartas){
+                    //System.out.println(ik);
+                    //System.out.println(iCartas);
+                    //System.out.println(nCartas);
+                    seleccionarCarta(skla[ik]);
+                    control.poner(skla[ik], "hand");
+                    if(skla[ik].length() == 2){
+                        iCartas += 6;
+                    }else if(skla[ik].charAt(2) == 's'){
+                        iCartas += 4;
+                    }else{
+                        iCartas += 12;
+                    }
+
+                    ik++;
+                }
+            }else{
+                while (iCartas > nCartas){
+                    ik--;
+                    desseleccionarCarta(skla[ik]);
+                    control.desponer(skla[ik], "hand");
+                    if(skla[ik].length() == 2){
+                        iCartas -= 6;
+                    }else if(skla[ik].charAt(2) == 's'){
+                        iCartas -= 4;
+                    }else{
+                        iCartas -= 12;
+                    }
+                }
+            }
+            
+        }
 
 	private int valorCarta(char letra) {
         int numero;
@@ -195,6 +263,18 @@ public class PanelIzquierdo extends JPanel implements Observador {
 			if (jtbArray[i][j].getText().equals(card)) {
 				jtbArray[i][j].setSelected(true);
 				cambiarColorBoton(jtbArray[i][j], false, card); 
+				salir = true;
+			}
+		}}
+	}
+        
+	private void desseleccionarCarta(String card) {
+		boolean salir = false;
+		for (int i = 0; i < 13 && !salir; i++) {
+		for (int j = 0; j < 13 && !salir; j++) {
+			if (jtbArray[i][j].getText().equals(card)) {
+				jtbArray[i][j].setSelected(false);
+				cambiarColorBoton(jtbArray[i][j], true, card); 
 				salir = true;
 			}
 		}}
@@ -365,10 +445,19 @@ public class PanelIzquierdo extends JPanel implements Observador {
 				}
 			}
 		}	
+
+		ArrayList<String> cards_selected = new ArrayList<String>();
+		for (int i = 0; i < 13; i++) {
+		for (int j = 0; j < 13; j++) {
+			if (jtbArray[i][j].isSelected()) 
+				cards_selected.add(jtbArray[i][j].getText());
+		}}
+		control.updateText(cards_selected);
+		onShowText("");
 	}
 
 	@Override 
-	public void onClearCards() {
+	public void onClearCards(boolean hands) {
 		for (int i = 0; i < 13; i++) {
 		for (int j = 0; j < 13; j++) {
 			JToggleButton jtb = jtbArray[i][j];
@@ -582,7 +671,7 @@ public class PanelIzquierdo extends JPanel implements Observador {
 							texto.append(sb.toString());
 
 							i = cont2 + i;
-							System.out.println(i);
+							//System.out.println(i);
 						} 
 					}
 				}
@@ -611,14 +700,9 @@ public class PanelIzquierdo extends JPanel implements Observador {
 							texto.append(", ");
 						texto.append(jtbArray[j][i].getText());
 					}
-				
 				}
 			}}
-
-
 		}
-	
-
 	}
 
 	@Override public void onShowText(final String card) {
@@ -637,8 +721,21 @@ public class PanelIzquierdo extends JPanel implements Observador {
 		checkSuitesToText(sb);	
 		checkOffsuitesToText(sb);
 
+
+		ArrayList<String> cards_selected = new ArrayList<String>();
+		for (int i = 0; i < 13; i++) {
+		for (int j = 0; j < 13; j++) {
+			if (jtbArray[i][j].isSelected()) 
+				cards_selected.add(jtbArray[i][j].getText());
+		}}
+		control.updateText(cards_selected);
 		control.mostrar(sb.toString());
+		double number = cards_selected.size() * 100.0 / 169.0;
+		DecimalFormat df = new DecimalFormat("0.00");
+		lblPorcentajeHor.setText(String.valueOf(df.format(number)) + "%");
 	}
+
+	@Override public void onRangeProcessShow(final ArrayList<String> cards) {}
 	@Override public void onAddCardHand(final String card) {}
 	@Override public void onSelectCard(final String text) {}
 	@Override public void onDeselectCardBoard(final String card) {}

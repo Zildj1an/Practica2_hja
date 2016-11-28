@@ -8,5 +8,6 @@ public interface Observador {
 	public void onRangeProccess(final ArrayList<String> cards);
 	public void onShowText(final String card);
 	public void onAddCardHand(final String card);
-	public void onClearCards();
+	public void onRangeProcessShow(final ArrayList<String> cards); 
+	public void onClearCards(boolean hands);
 }
