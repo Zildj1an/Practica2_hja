@@ -138,8 +138,8 @@ public class PanelInferior extends JPanel implements Observador {
 	}
 
 	@Override public void onDeselectCard(final String card) {
-		//cards_onHand.remove(card);	
-		//mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
+		cards_onHand.remove(card);	
+		mostrarTextOnBoard(cards_onHand, txtCartasEnMano);
 	}
 
 	@Override public void onClearCards(boolean hands) {
