@@ -679,7 +679,7 @@ public class PanelIzquierdo extends JPanel implements Observador {
 			//Comprobar individuales 
 			for (int i = 0; i < 12; i++)  {
 			for (int j = i + 1; j < 13;  j++) {
-				if (j == i+1 && i < 12) {
+				if (j == i+1 && j < 12) {
 					if (jtbArray[j][i].isSelected() && !jtbArray[j+1][i].isSelected()) {
 						if (texto.length() > 0)
 							texto.append(", ");
