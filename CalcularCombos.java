@@ -267,7 +267,7 @@ public class CalcularCombos {
                 String carta2 = cartasEnMano.substring(1,2);
                 if(carta1.equals(carta2))
                 {
-                    if(valorCarta(carta1.charAt(0)) > cartasOrdenadasBoard[0])
+                    if(valorCarta(carta1.charAt(0)) > valorCarta(cartasOrdenadasBoard[0]))
                     {
                         int contador = poker.getContadorSinColor();
                         this.overPair.add(poker.getCartasEnManoSinColor() + " (" + contador + ")");
@@ -275,18 +275,28 @@ public class CalcularCombos {
                     }
                     else
                     {
-                        int contador = poker.getContadorSinColor();
-                        this.pocketPair.add(poker.getCartasEnManoSinColor() + " (" + contador + ")");
-                        this.pocketPairContador += contador;
+                        if(this.pocketPairContador != 0)
+                        {
+                            int contador = poker.getContadorSinColor();
+                            this.weakPair.add(poker.getCartasEnManoSinColor() + " (" + contador + ")");
+                            this.weakPairContador += contador;
+                        }
+                        else
+                        {
+                            int contador = poker.getContadorSinColor();
+                            this.pocketPair.add(poker.getCartasEnManoSinColor() + " (" + contador + ")");
+                            this.pocketPairContador += contador;
+                        }
+
                     }
                 }
-                else if(carta1.equals(cartasOrdenadasBoard[0]) || carta2.equals(cartasOrdenadasBoard[0]))
+                else if(carta1.charAt(0) == cartasOrdenadasBoard[0] || carta2.charAt(0) == cartasOrdenadasBoard[0])
                 {
                     int contador = poker.getContadorSinColor();
                     this.topPair.add(poker.getCartasEnManoSinColor() + " (" + contador + ")");
                     this.topPairContador += contador;
                 }
-                else if(carta1.equals(cartasOrdenadasBoard[2]) || carta2.equals(cartasOrdenadasBoard[2]))
+                else if(carta1.charAt(0) == cartasOrdenadasBoard[2] || carta2.charAt(0) == cartasOrdenadasBoard[2])
                 {
                     int contador = poker.getContadorSinColor();
                     this.middlePair.add(poker.getCartasEnManoSinColor() + " (" + contador + ")");

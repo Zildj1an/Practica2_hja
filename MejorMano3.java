@@ -296,6 +296,9 @@ public class MejorMano3 {
                         j+=2;
                     }
                 }
+                contadorEscalera = 1;
+                contadorEscaleraMax = 1;
+                contadorHuecoEscalera = 0;
                 for (int k = 2; k < escaleracolor.length; k += 2)
                 {
                     if (valorCarta(escaleracolor[k-2]) - valorCarta(escaleracolor[k]) < 3)
@@ -607,9 +610,8 @@ public class MejorMano3 {
                 } else {
                     bestHand = "High Card " + x[0];
                     rank = 1;
-                    for (int i = 0; i < 10; i++){
-                        combination += x[i];
-                    }
+                    combination += x[0];
+                    combination += x[1];
                 }
             }
         }

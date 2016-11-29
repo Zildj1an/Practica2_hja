@@ -3,7 +3,7 @@ import java.util.List;
 
 public class PokerTrap {
 
-
+    private char marca;
     private String bestHandSinColor;
     private String bestHandColorMayor;
     private String bestHandColorMenor;
@@ -45,6 +45,10 @@ public class PokerTrap {
             char[] cartas = cartasEnManoSinColor.toCharArray();
             cartasMano += cartas[0];
             cartasMano += cartas[2];
+            if(cartas[0] != cartas[2])
+            {
+                cartasMano += marca;
+            }
         }
 
         return cartasMano;
@@ -90,6 +94,10 @@ public class PokerTrap {
 
     public void start(String cartasEnMano, String cartasBoard){
 
+        if(cartasEnMano.length() == 3)
+            this.marca = cartasEnMano.charAt(2);
+        else
+            this.marca = ' ';
         this.bestHandSinColor = "";
         this.bestHandColorMayor = "";
         this.bestHandColorMenor = "";
@@ -108,8 +116,6 @@ public class PokerTrap {
         int cartaManoEnBoard1 = 0;
         int cartaManoEnBoard2 = 0;
         MejorMano3 mejorMano = new MejorMano3();
-        List<String> listaCartas = new ArrayList<>();
-        listaCartas.add("K8s");
         //String cartasEnMano = "AKo"; // AA A7s
         String cartasEnManoOperativas = "";
         //String cartasBoard = "8s3s4s8s8d";
@@ -162,6 +168,23 @@ public class PokerTrap {
 
         boolean colorBoolean = false;
         // si 3 tienen el mismo color y es suit = 5 color
+
+        for(int p = 0; p < cartasBoard.length(); p+=2)
+        {
+            if(x[p] == y[0])
+            {
+                cartaManoEnBoard1++;
+                coloresUsados1 += x[p];
+                coloresUsados1 += x[p+1];
+            }
+            if(x[p] == y[1])
+            {
+                cartaManoEnBoard2++;
+                coloresUsados2 += x[p];
+                coloresUsados2 += x[p+1];
+            }
+        }
+
         if(cartasEnMano.length() == 3 && maxContadorColor >= 3 && y[2] == 's')
         {
             colorBoolean = true;
@@ -169,15 +192,15 @@ public class PokerTrap {
             {
                 if(x[p] == y[0])
                 {
-                    cartaManoEnBoard1++;
+
                     if(cartasBoard.substring(p+1).toCharArray()[0] == maxColor)
                     {
                         colorBoolean = false;
                     }
                 }
-                else if(x[p] == y[1])
+                if(x[p] == y[1])
                 {
-                    cartaManoEnBoard2++;
+
                     if(cartasBoard.substring(p+1).toCharArray()[0] == maxColor)
                     {
                         colorBoolean = false;
@@ -201,9 +224,7 @@ public class PokerTrap {
             {
                 if(x[p] == y[0])
                 {
-                    cartaManoEnBoard1++;
-                    coloresUsados1 += x[p];
-                    coloresUsados1 += x[p+1];
+                    //cartaManoEnBoard1++;
                     if(cartasBoard.substring(p+1).toCharArray()[0] == maxColor)
                     {
                         contadorColoresEnBoard1 = true;
@@ -211,9 +232,7 @@ public class PokerTrap {
                 }
                 if(x[p] == y[1])
                 {
-                    cartaManoEnBoard2++;
-                    coloresUsados2 += x[p];
-                    coloresUsados2 += x[p+1];
+                    //cartaManoEnBoard2++;
                     if(cartasBoard.substring(p+1).toCharArray()[0] == maxColor)
                     {
                         contadorColoresEnBoard2 = true;
@@ -407,6 +426,20 @@ public class PokerTrap {
         // PARA ELLO USA EL INT CARTAMANOENBOARD
         if(cartasEnMano.length() == 3 && y[2] == 's')// AKs AQs Q7s
         {
+            marca = 's';
+            char[] coloresUsados1Char = coloresUsados1.toCharArray();
+            char[] coloresUsados2Char = coloresUsados2.toCharArray();
+
+            for(int d = 0; d < coloresUsados1.length(); d=d+2)
+            {
+                for(int f = 0; f < coloresUsados2.length(); f=f+2)
+                {
+                    if(coloresUsados1Char[d+1] == coloresUsados2Char[f+1])
+                    {
+                        cartaManoEnBoard1--;
+                    }
+                }
+            }
             if(colorBoolean)
             {
                 System.out.println(cartasEnMano1 + "(" + (1)+ ")");
@@ -502,7 +535,7 @@ public class PokerTrap {
                 }
             }
 
-
+            marca = 'o';
             System.out.println(bestHand2 + " " + cartasEnMano2 + " " + contadorSinColor);
             this.bestHandSinColor = bestHand2;
             this.contadorSinColor = contadorSinColor;

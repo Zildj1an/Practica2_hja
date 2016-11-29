@@ -29,6 +29,7 @@ public class PanelDerecho extends JPanel implements Observador {
 	private JLabel lblTxt11; 
 	private JLabel lblTxt12; 
 	private JLabel lblTxt13; 
+	private JLabel lblTxtCombo;
 
 	private ArrayList<JLabel> lbls;
 
@@ -61,6 +62,7 @@ public class PanelDerecho extends JPanel implements Observador {
 		lblTxt11 = new JLabel(); //"no made hand");  // No made hand
 		lblTxt12 = new JLabel(); //"no made hand");  // No made hand
 		lblTxt13 = new JLabel(); //"no made hand");  // No made hand
+		lblTxtCombo = new JLabel();
 
 		lbls.add(lblTxt);
 		lbls.add(lblTxt1);
@@ -76,6 +78,7 @@ public class PanelDerecho extends JPanel implements Observador {
 		lbls.add(lblTxt11);
 		lbls.add(lblTxt12);
 		lbls.add(lblTxt13);
+		lbls.add(lblTxtCombo);
 
 		for (int i = 0; i < lbls.size(); i++) {
 			add(lbls.get(i));
@@ -87,6 +90,7 @@ public class PanelDerecho extends JPanel implements Observador {
 
 	@Override public void onShowResults(CalcularCombos calcularCombos) {
 		int marginLeft = 20, marginRight = 15, marginTop = 2;
+		int suma = 0;
 
 		// ESCALERACOLOR
 		ArrayList<String> escaleracolor = calcularCombos.getEscaleraColor();
@@ -101,6 +105,7 @@ public class PanelDerecho extends JPanel implements Observador {
 		}
 		if (n_escCol > 0)
 			lblTxt.setText(sb9.toString());
+		suma += n_escCol;
 		//----------------------------------------------------------------------
 
 		// POKER
@@ -116,6 +121,7 @@ public class PanelDerecho extends JPanel implements Observador {
 		}
 		if (n_poker > 0)
 			lblTxt1.setText(sb8.toString());
+		suma += n_poker;
 		//----------------------------------------------------------------------
 
 		// FULL HOUSE
@@ -131,6 +137,7 @@ public class PanelDerecho extends JPanel implements Observador {
 		}
 		if (n_full > 0)
 			lblTxt2.setText(sb7.toString());
+		suma += n_full;
 		//----------------------------------------------------------------------
 
 		// COLOR
@@ -146,6 +153,7 @@ public class PanelDerecho extends JPanel implements Observador {
 		}
 		if (n_col > 0)
 			lblTxt3.setText(sb6.toString());
+		suma += n_col;
 		//----------------------------------------------------------------------
 
 		// ESCALERA
@@ -161,6 +169,7 @@ public class PanelDerecho extends JPanel implements Observador {
 		}
 		if (n_esc > 0)
 			lblTxt4.setText(sb5.toString());
+		suma += n_esc;
 		//----------------------------------------------------------------------
 
 		// TRIO
@@ -176,7 +185,25 @@ public class PanelDerecho extends JPanel implements Observador {
 		}
 		if (n_trio > 0)
 			lblTxt5.setText(sb4.toString());
+		suma += n_trio;
 		//----------------------------------------------------------------------
+
+		//  DOBLE PAREJA
+		ArrayList<String> doblepareja= calcularCombos.getDoblePareja();
+		int n_dp = calcularCombos.getDobleParejaContador();
+		StringBuilder sb14 = new StringBuilder();
+		sb14.append("Double pair: ");
+		sb14.append(n_dp);
+		sb14.append(" ");
+		for (int i = 0; i < doblepareja.size(); i++) {
+			sb14.append(doblepareja.get(i));
+			sb14.append(" ");
+		}
+		if (n_dp > 0)
+			lblTxt6.setText(sb14.toString());
+		suma += n_dp;
+		//----------------------------------------------------------------------
+
 
 		// PAREJA OVERPAIR
 		ArrayList<String> overpair = calcularCombos.getOverPair();
@@ -190,7 +217,8 @@ public class PanelDerecho extends JPanel implements Observador {
 			sb2.append(" ");
 		}
 		if (n_opair > 0)
-			lblTxt6.setText(sb2.toString());
+			lblTxt7.setText(sb2.toString());
+		suma += n_opair;
 		//----------------------------------------------------------------------
 
 		// PAREJA TOPPAIR 
@@ -205,7 +233,8 @@ public class PanelDerecho extends JPanel implements Observador {
 			sb10.append(" ");
 		}
 		if (n_tpair > 0)
-			lblTxt7.setText(sb10.toString());
+			lblTxt8.setText(sb10.toString());
+		suma += n_tpair;
 		//----------------------------------------------------------------------
 
 		// PAREJA POCKETPAIR
@@ -220,22 +249,24 @@ public class PanelDerecho extends JPanel implements Observador {
 			sb11.append(" ");
 		}
 		if (n_ppair > 0)
-			lblTxt8.setText(sb11.toString());
+			lblTxt9.setText(sb11.toString());
+		suma += n_ppair;
 		//----------------------------------------------------------------------
 
 		// DOBLES PAREJAS
-		ArrayList<String> doblepareja = calcularCombos.getDoblePareja();
-		int n_dpair = calcularCombos.getDobleParejaContador();
+		ArrayList<String> middlepair = calcularCombos.getMiddlePair();
+		int n_mpair = calcularCombos.getMiddlePairContador();
 		StringBuilder sb3 = new StringBuilder();
 		sb3.append("Middle pair: ");
-		sb3.append(n_dpair);
+		sb3.append(n_mpair);
 		sb3.append(" ");
-		for (int i = 0; i < doblepareja.size(); i++) {
-			sb3.append(doblepareja.get(i));
+		for (int i = 0; i < middlepair.size(); i++) {
+			sb3.append(middlepair.get(i));
 			sb3.append(" ");
 		}
-		if (n_dpair > 0)
-			lblTxt9.setText(sb3.toString());
+		if (n_mpair > 0)
+			lblTxt10.setText(sb3.toString());
+		suma += n_mpair;
 		//----------------------------------------------------------------------
 
 		// PAREJA WEAKPAIR
@@ -250,38 +281,44 @@ public class PanelDerecho extends JPanel implements Observador {
 			sb13.append(" ");
 		}
 		if (n_wpair > 0)
-			lblTxt10.setText(sb13.toString());
+			lblTxt11.setText(sb13.toString());
+		suma += n_wpair;
 		//----------------------------------------------------------------------
 
 		// CARTA ALTA
+		ArrayList<String> cartaAlta = calcularCombos.getCartaAlta();
 		int n_calta = calcularCombos.getCartaAltaContador();
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("Ace high: ");
 		sb1.append(n_calta);
 		sb1.append(" ");
-		ArrayList<String> cartaAlta = calcularCombos.getCartaAlta();
 		for (int i = 0; i < cartaAlta.size(); i++) {
 			sb1.append(cartaAlta.get(i));
 			sb1.append(" ");
 		}
 		if (n_calta > 0)
-			lblTxt11.setText(sb1.toString());
+			lblTxt12.setText(sb1.toString());
+		suma += n_calta;
 		//----------------------------------------------------------------------
 
 		// NOMADEHAND
+		ArrayList<String> noMadeHand = calcularCombos.getNoMadeHand();
 		int n_nmh = calcularCombos.getNoMadeHandContador();
 		StringBuilder sb = new StringBuilder();
 		sb.append("No made hand: ");
 		sb.append(n_nmh);
-		ArrayList<String> noMadeHand = calcularCombos.getNoMadeHand();
+		sb.append(" ");
 		for (int i = 0; i < noMadeHand.size(); i++) {
 			sb.append(noMadeHand.get(i));
 			sb.append(" ");
 		}
 		if (n_nmh > 0)
-			lblTxt12.setText(sb.toString());
+			lblTxt13.setText(sb.toString());
+		suma += n_nmh;
 		//----------------------------------------------------------------------
 
+		if (suma > 0) 
+			lblTxtCombo.setText("Total number of combos " + suma);
 	}
 	@Override public void onRangeProcessShow(final ArrayList<String> cards) {}
 	@Override public void onAddCardHand(final String card) {}
